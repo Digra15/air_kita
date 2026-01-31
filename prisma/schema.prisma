@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -7,7 +8,10 @@ datasource db {
 }
 
 enum Role {
+  SUPER_ADMIN
   ADMIN
+  METER_READER
+  TREASURER
   CUSTOMER
 }
 
@@ -77,6 +81,7 @@ model Bill {
   reading    MeterReading @relation(fields: [readingId], references: [id])
   amount     Decimal
   status     BillStatus @default(UNPAID)
+  paymentMethod PaymentMethod?
   dueDate    DateTime
   paidAt     DateTime?
   createdAt  DateTime   @default(now())
@@ -87,4 +92,72 @@ enum BillStatus {
   UNPAID
   PAID
   OVERDUE
+}
+
+enum PaymentMethod {
+  CASH
+  QRIS
+  TRANSFER
+  EDC
+}
+
+// Finance Models
+
+model Transaction {
+  id          String          @id @default(cuid())
+  type        TransactionType
+  amount      Decimal
+  category    String          // e.g., "OPERASIONAL", "GAJI", "TAGIHAN", "MODAL"
+  description String
+  date        DateTime        @default(now())
+  referenceId String?         // Optional: link to Bill ID
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+enum TransactionType {
+  CAPITAL       // Modal Awal
+  REVENUE       // Pendapatan dari Tagihan
+  OTHER_INCOME  // Pemasukan Lain
+  EXPENSE       // Pengeluaran
+}
+
+model SystemSettings {
+  id              Int     @id @default(1)
+  companyName     String  @default("Air Kita")
+  companyEmail    String  @default("admin@airkita.com")
+  companyPhone    String  @default("+62 812-3456-7890")
+  companyWebsite  String  @default("https://airkita.com")
+  companyAddress  String  @default("Jl. Contoh No. 123")
+  companyLogo     String? // URL to the uploaded logo
+  
+  // Custom Text
+  heroTitle       String  @default("Kelola Tagihan Air Anda dengan Mudah & Cepat")
+  heroDescription String  @default("Pantau penggunaan air, cek tagihan bulanan, dan lakukan pembayaran dengan mudah melalui platform digital Air Kita.")
+  loginTitle      String  @default("Layanan Air Bersih Digital Terpercaya")
+  loginDescription String @default("Kelola pembayaran air Anda dengan mudah, cepat, dan aman melalui platform digital kami.")
+  
+  // Security
+  enable2FA       Boolean @default(false)
+  sessionTimeout  Int     @default(30) // minutes
+  
+  // Database & Backup
+  backupDaily     Boolean @default(true)
+  retentionDays   Int     @default(30)
+  
+  updatedAt       DateTime @updatedAt
+}
+
+model BackupHistory {
+  id        String   @id @default(cuid())
+  fileName  String
+  fileSize  String   // e.g. "2.5 MB"
+  status    BackupStatus @default(SUCCESS)
+  createdAt DateTime @default(now())
+}
+
+enum BackupStatus {
+  SUCCESS
+  FAILED
+  PENDING
 }

@@ -12,10 +12,29 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
 import { id as localeId } from "date-fns/locale"
-import { CheckCircle, Printer } from "lucide-react"
-import { markAsPaid } from "@/lib/actions/billing"
+import { CheckCircle, Printer, MoreHorizontal, Undo2, AlertCircle, Info } from "lucide-react"
+import { markAsPaid, markAsUnpaid } from "@/lib/actions/billing"
 import { toast } from "sonner"
 import { BillStatus } from "@prisma/client"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { useState } from "react"
 
 interface BillTableProps {
     data: {
@@ -29,23 +48,64 @@ interface BillTableProps {
             year: number
             usageAmount: number | string
         }
-        dueDate: string | Date
+        dueDate: string
         amount: number | string
         status: "PAID" | "UNPAID" | "OVERDUE"
     }[]
 }
 
 export function BillTable({ data }: BillTableProps) {
-    
-    async function handleMarkPaid(id: string) {
-        if(confirm('Tandai tagihan ini sebagai LUNAS?')) {
-            const result = await markAsPaid(id)
-            if (result.success) {
-                toast.success(result.message)
+    const [confirmDialog, setConfirmDialog] = useState<{
+        isOpen: boolean;
+        type: 'pay' | 'unpay' | null;
+        billId: string | null;
+    }>({
+        isOpen: false,
+        type: null,
+        billId: null
+    });
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    async function handleConfirmAction() {
+        if (!confirmDialog.billId || !confirmDialog.type) return;
+
+        setIsLoading(true);
+        try {
+            let result;
+            if (confirmDialog.type === 'pay') {
+                result = await markAsPaid(confirmDialog.billId);
             } else {
-                toast.error(result.message)
+                result = await markAsUnpaid(confirmDialog.billId);
             }
+
+            if (result.success) {
+                toast.success(result.message);
+            } else {
+                toast.error(result.message);
+            }
+        } catch (error) {
+            toast.error("Terjadi kesalahan saat memproses permintaan");
+        } finally {
+            setIsLoading(false);
+            setConfirmDialog({ isOpen: false, type: null, billId: null });
         }
+    }
+
+    const openPayDialog = (id: string) => {
+        setConfirmDialog({
+            isOpen: true,
+            type: 'pay',
+            billId: id
+        });
+    }
+
+    const openUnpayDialog = (id: string) => {
+        setConfirmDialog({
+            isOpen: true,
+            type: 'unpay',
+            billId: id
+        });
     }
 
     const formatCurrency = (value: number) => {
@@ -61,13 +121,11 @@ export function BillTable({ data }: BillTableProps) {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Periode</TableHead>
-                        <TableHead>Pelanggan</TableHead>
-                        <TableHead>Jatuh Tempo</TableHead>
-                        <TableHead>Pemakaian</TableHead>
-                        <TableHead>Total Tagihan</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Aksi</TableHead>
+                        <TableHead className="w-[200px] text-xs font-bold uppercase tracking-wider text-muted-foreground">NO. INVOICE</TableHead>
+                        <TableHead className="text-xs font-bold uppercase tracking-wider text-muted-foreground">NAMA PELANGGAN</TableHead>
+                        <TableHead className="text-xs font-bold uppercase tracking-wider text-muted-foreground">JUMLAH</TableHead>
+                        <TableHead className="text-xs font-bold uppercase tracking-wider text-muted-foreground">STATUS</TableHead>
+                        <TableHead className="text-right text-xs font-bold uppercase tracking-wider text-muted-foreground">AKSI</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -80,50 +138,59 @@ export function BillTable({ data }: BillTableProps) {
                     ) : (
                         data.map((bill) => (
                             <TableRow key={bill.id}>
-                                <TableCell>
-                                    {bill.reading.month}/{bill.reading.year}
+                                <TableCell className="font-medium text-muted-foreground text-xs">
+                                    INV/{bill.reading.year}/{bill.reading.month}/{bill.id.substring(0, 3).toUpperCase()}
                                 </TableCell>
                                 <TableCell>
-                                    <div className="font-medium">{bill.customer.name}</div>
-                                    <div className="text-xs text-muted-foreground">{bill.customer.meterNumber}</div>
+                                    <div className="font-bold text-gray-900">{bill.customer.name}</div>
+                                    <div className="text-xs font-bold text-muted-foreground">{bill.customer.meterNumber}</div>
                                 </TableCell>
-                                <TableCell>
-                                    {format(new Date(bill.dueDate), "dd MMM yyyy", { locale: localeId })}
-                                </TableCell>
-                                <TableCell>
-                                    {Number(bill.reading.usageAmount)} m3
-                                </TableCell>
-                                <TableCell className="font-bold">
+                                <TableCell className="font-bold text-gray-900">
                                     {formatCurrency(Number(bill.amount))}
                                 </TableCell>
                                 <TableCell>
                                     {bill.status === BillStatus.PAID ? (
-                                        <Badge variant="default" className="bg-green-600 hover:bg-green-700">LUNAS</Badge>
+                                        <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-100 uppercase text-[10px] font-bold px-2 py-0.5">LUNAS</Badge>
                                     ) : (
-                                        <Badge variant="destructive">BELUM BAYAR</Badge>
+                                        <Badge variant="outline" className="bg-orange-50 text-orange-600 border-orange-100 hover:bg-orange-100 uppercase text-[10px] font-bold px-2 py-0.5">BELUM BAYAR</Badge>
                                     )}
                                 </TableCell>
                                 <TableCell className="text-right">
-                                    <div className="flex justify-end gap-2">
-                                        {bill.status === BillStatus.UNPAID && (
-                                            <Button 
-                                                size="sm" 
-                                                variant="outline"
-                                                className="text-green-600 border-green-200 hover:bg-green-50"
-                                                onClick={() => handleMarkPaid(bill.id)}
-                                                title="Tandai Lunas"
-                                            >
-                                                <CheckCircle className="h-4 w-4 mr-1" /> Bayar
-                                            </Button>
-                                        )}
+                                    <div className="flex justify-end items-center gap-2">
                                         <Button 
-                                            size="sm" 
-                                            variant="secondary"
+                                            variant="ghost" 
+                                            size="icon"
+                                            className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 h-8 w-8"
                                             onClick={() => window.open(`/admin/billing/print/${bill.id}`, '_blank')}
                                             title="Cetak Struk"
                                         >
                                             <Printer className="h-4 w-4" />
                                         </Button>
+                                        
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuLabel>Aksi</DropdownMenuLabel>
+                                                <DropdownMenuItem>Lihat Detail</DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                {bill.status === BillStatus.UNPAID && (
+                                                    <DropdownMenuItem onClick={() => openPayDialog(bill.id)} className="text-green-600 cursor-pointer">
+                                                        <CheckCircle className="mr-2 h-4 w-4" />
+                                                        Tandai Lunas
+                                                    </DropdownMenuItem>
+                                                )}
+                                                {bill.status === BillStatus.PAID && (
+                                                    <DropdownMenuItem onClick={() => openUnpayDialog(bill.id)} className="text-red-600 cursor-pointer">
+                                                        <Undo2 className="mr-2 h-4 w-4" />
+                                                        Batal Bayar
+                                                    </DropdownMenuItem>
+                                                )}
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -131,6 +198,50 @@ export function BillTable({ data }: BillTableProps) {
                     )}
                 </TableBody>
             </Table>
+
+            <AlertDialog open={confirmDialog.isOpen} onOpenChange={(open) => !open && setConfirmDialog(prev => ({ ...prev, isOpen: false }))}>
+                <AlertDialogContent className="bg-white border-blue-100 shadow-xl sm:max-w-[425px] rounded-xl">
+                    <AlertDialogHeader className="flex flex-col items-center">
+                        <div className={`mx-auto flex h-16 w-16 items-center justify-center rounded-full mb-4 ${
+                            confirmDialog.type === 'pay' ? 'bg-blue-50' : 'bg-orange-50'
+                        }`}>
+                            {confirmDialog.type === 'pay' ? (
+                                <CheckCircle className="h-8 w-8 text-blue-600" />
+                            ) : (
+                                <AlertCircle className="h-8 w-8 text-orange-600" />
+                            )}
+                        </div>
+                        <AlertDialogTitle className="text-center text-xl font-bold text-gray-900">
+                            {confirmDialog.type === 'pay' ? 'Konfirmasi Pembayaran' : 'Batalkan Pembayaran'}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription className="text-center text-gray-500 max-w-[85%]">
+                            {confirmDialog.type === 'pay' 
+                                ? 'Apakah Anda yakin ingin menandai tagihan ini sebagai LUNAS? Tindakan ini akan mencatat pembayaran secara sistem.' 
+                                : 'Apakah Anda yakin ingin membatalkan status lunas tagihan ini? Status akan kembali menjadi BELUM BAYAR.'}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="sm:justify-center gap-3 mt-6 w-full sm:space-x-0">
+                        <AlertDialogCancel disabled={isLoading} className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-lg">
+                            Batal
+                        </AlertDialogCancel>
+                        <AlertDialogAction 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleConfirmAction();
+                            }} 
+                            disabled={isLoading}
+                            className={`flex-1 rounded-lg text-white font-semibold transition-all
+                                ${confirmDialog.type === 'pay' 
+                                    ? 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200 hover:shadow-blue-300' 
+                                    : 'bg-orange-600 hover:bg-orange-700 shadow-lg shadow-orange-200 hover:shadow-orange-300'
+                                }
+                            `}
+                        >
+                            {isLoading ? 'Memproses...' : (confirmDialog.type === 'pay' ? 'Ya, Tandai Lunas' : 'Ya, Batalkan')}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     )
 }

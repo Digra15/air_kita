@@ -1,0 +1,139 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-01-31T08:18:48.979Z",
+  "data": {
+    "systemSettings": [
+      {
+        "id": 1,
+        "companyName": "Tirta Asri",
+        "companyEmail": "admin@airkita.com",
+        "companyPhone": "+62 812-3456-7890",
+        "companyWebsite": "https://airkita.com",
+        "companyAddress": "Geran, Sedayu, Pracimantoro",
+        "companyLogo": null,
+        "heroTitle": "Kelola Tagihan Air Anda dengan Mudah & Cepat",
+        "heroDescription": "Pantau penggunaan air, cek tagihan bulanan, dan lakukan pembayaran dengan mudah melalui platform digital Air Kita.",
+        "loginTitle": "Layanan Air Bersih Digital Terpercaya",
+        "loginDescription": "Kelola pembayaran air Anda dengan mudah, cepat, dan aman melalui platform digital kami.",
+        "enable2FA": false,
+        "sessionTimeout": 30,
+        "backupDaily": true,
+        "retentionDays": 30,
+        "updatedAt": "2026-01-31T07:10:22.924Z"
+      }
+    ],
+    "users": [
+      {
+        "id": "cml1tm8pc00004sv1llbtycvr",
+        "email": "admin@airkita.com",
+        "password": "$2b$12$iVG1I6z8vqgWsFh7fyFWmuuoRADn7xbo.tOKPf8Yyaj2U7Akyz/.u",
+        "name": "Administrator",
+        "role": "ADMIN",
+        "createdAt": "2026-01-31T04:37:31.920Z",
+        "updatedAt": "2026-01-31T04:37:31.920Z"
+      },
+      {
+        "id": "cml1tm9sl00034sv1s91vcd1z",
+        "email": "budi@gmail.com",
+        "password": "$2b$12$Qs5gcdKPT7ZmeodXinqcvuCsXdWWuWIuZoKJEPvX/0qxxoKkxW4T6",
+        "name": "Budi Santoso",
+        "role": "CUSTOMER",
+        "createdAt": "2026-01-31T04:37:33.190Z",
+        "updatedAt": "2026-01-31T04:37:33.190Z"
+      },
+      {
+        "id": "cml20ix4p0000r0v1zplq8iej",
+        "email": "arunika@arunika.com",
+        "password": "$2b$10$R3J/sPWQWdWWNEf2uI3atOfQ3MCrwmAVUGZHts8pmHeDuGCH740P6",
+        "name": "Arunika",
+        "role": "SUPER_ADMIN",
+        "createdAt": "2026-01-31T07:50:54.265Z",
+        "updatedAt": "2026-01-31T08:01:27.011Z"
+      }
+    ],
+    "tariffs": [
+      {
+        "id": "cml1tm97n00014sv1t8ikneqp",
+        "name": "Rumah Tangga A",
+        "ratePerCubic": "3000",
+        "baseFee": "15000",
+        "description": "Tarif untuk rumah tangga standar",
+        "createdAt": "2026-01-31T04:37:32.579Z",
+        "updatedAt": "2026-01-31T04:37:32.579Z"
+      }
+    ],
+    "customers": [
+      {
+        "id": "cml1tm9ci00024sv1wwynnlbq",
+        "name": "Budi Santoso",
+        "meterNumber": "100001",
+        "address": "Jl. Merdeka No. 45",
+        "phoneNumber": "081234567890",
+        "status": "ACTIVE",
+        "userId": "cml1tm9sl00034sv1s91vcd1z",
+        "tariffId": "cml1tm97n00014sv1t8ikneqp",
+        "createdAt": "2026-01-31T04:37:32.754Z",
+        "updatedAt": "2026-01-31T04:37:33.190Z"
+      },
+      {
+        "id": "cml1ue3tr0000b4v1wa0uhk55",
+        "name": "Arunika Sha",
+        "meterNumber": "TA02090001",
+        "address": "Geran",
+        "phoneNumber": "-",
+        "status": "ACTIVE",
+        "userId": null,
+        "tariffId": "cml1tm97n00014sv1t8ikneqp",
+        "createdAt": "2026-01-31T04:59:11.967Z",
+        "updatedAt": "2026-01-31T04:59:11.967Z"
+      }
+    ],
+    "meterReadings": [
+      {
+        "id": "cml1us9id0001b4v18515qtis",
+        "customerId": "cml1ue3tr0000b4v1wa0uhk55",
+        "month": 1,
+        "year": 2026,
+        "meterReading": "4",
+        "usageAmount": "4",
+        "recordedAt": "2026-01-31T00:00:00.000Z"
+      },
+      {
+        "id": "cml1uth4e0003b4v1ukypbt0x",
+        "customerId": "cml1ue3tr0000b4v1wa0uhk55",
+        "month": 2,
+        "year": 2026,
+        "meterReading": "10",
+        "usageAmount": "6",
+        "recordedAt": "2026-01-31T00:00:00.000Z"
+      }
+    ],
+    "bills": [
+      {
+        "id": "cml1us9ky0002b4v1jhsnjfnp",
+        "customerId": "cml1ue3tr0000b4v1wa0uhk55",
+        "readingId": "cml1us9id0001b4v18515qtis",
+        "amount": "27000",
+        "status": "UNPAID",
+        "paymentMethod": null,
+        "dueDate": "2026-02-19T17:00:00.000Z",
+        "paidAt": null,
+        "createdAt": "2026-01-31T05:10:12.610Z",
+        "updatedAt": "2026-01-31T05:10:12.610Z"
+      },
+      {
+        "id": "cml1uth6t0004b4v1lhzw17iv",
+        "customerId": "cml1ue3tr0000b4v1wa0uhk55",
+        "readingId": "cml1uth4e0003b4v1ukypbt0x",
+        "amount": "33000",
+        "status": "UNPAID",
+        "paymentMethod": null,
+        "dueDate": "2026-03-19T17:00:00.000Z",
+        "paidAt": null,
+        "createdAt": "2026-01-31T05:11:09.125Z",
+        "updatedAt": "2026-01-31T06:28:23.240Z"
+      }
+    ],
+    "transactions": []
+  }
+}

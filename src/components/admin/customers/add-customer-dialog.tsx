@@ -53,7 +53,7 @@ export function AddCustomerDialog({ tariffs }: { tariffs: { id: string; name: st
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white">
           <Plus className="mr-2 h-4 w-4" /> Tambah Pelanggan
         </Button>
       </DialogTrigger>
@@ -128,7 +128,7 @@ export function AddCustomerDialog({ tariffs }: { tariffs: { id: string; name: st
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700 text-white">
                 {loading ? 'Menyimpan...' : 'Simpan'}
             </Button>
           </DialogFooter>

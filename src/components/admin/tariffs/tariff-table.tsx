@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from "react"
 import {
   Table,
   TableBody,
@@ -9,15 +10,18 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { MoreHorizontal, Edit, Trash } from "lucide-react"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Trash } from "lucide-react"
+import { EditTariffDialog } from "./edit-tariff-dialog"
 import { deleteTariff } from "@/lib/actions/tariff"
 import { toast } from "sonner"
 
@@ -33,16 +37,22 @@ interface TariffTableProps {
 }
 
 export function TariffTable({ data }: TariffTableProps) {
+  const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
   
-  async function handleDelete(id: string) {
-      if(confirm('Apakah Anda yakin ingin menghapus tarif ini?')) {
-          const result = await deleteTariff(id)
-          if(result.success) {
-            toast.success(result.message)
-          } else {
-            toast.error(result.message)
-          }
-      }
+  async function confirmDelete() {
+    if (!deleteId) return
+    
+    setIsDeleting(true)
+    const result = await deleteTariff(deleteId)
+    setIsDeleting(false)
+    setDeleteId(null)
+    
+    if (result.success) {
+      toast.success(result.message)
+    } else {
+      toast.error(result.message)
+    }
   }
 
   // Helper to format currency
@@ -58,12 +68,12 @@ export function TariffTable({ data }: TariffTableProps) {
     <div className="rounded-md border">
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Nama Golongan</TableHead>
-            <TableHead>Tarif / m3</TableHead>
-            <TableHead>Biaya Beban</TableHead>
-            <TableHead>Jumlah Pelanggan</TableHead>
-            <TableHead className="text-right">Aksi</TableHead>
+          <TableRow className="hover:bg-transparent">
+            <TableHead className="w-[200px] text-xs font-bold text-slate-400 uppercase tracking-wider">NAMA GOLONGAN</TableHead>
+            <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">TARIF / M3</TableHead>
+            <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">BIAYA BEBAN</TableHead>
+            <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">JUMLAH PELANGGAN</TableHead>
+            <TableHead className="text-right text-xs font-bold text-slate-400 uppercase tracking-wider">AKSI</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -84,30 +94,42 @@ export function TariffTable({ data }: TariffTableProps) {
                 <TableCell>{formatCurrency(Number(tariff.baseFee))}</TableCell>
                 <TableCell>{tariff._count.customers} Pelanggan</TableCell>
                 <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
+                  <div className="flex justify-end gap-1">
+                      <EditTariffDialog tariff={tariff} />
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-full" onClick={() => setDeleteId(tariff.id)}>
+                        <Trash className="h-4 w-4" />
                       </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                      <DropdownMenuItem>
-                        <Edit className="mr-2 h-4 w-4" /> Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(tariff.id)}>
-                        <Trash className="mr-2 h-4 w-4" /> Hapus
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  </div>
                 </TableCell>
               </TableRow>
             ))
           )}
         </TableBody>
       </Table>
+      
+      <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
+        <AlertDialogContent className="bg-white rounded-xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus Golongan Tarif?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tindakan ini akan menghapus data tarif secara permanen. Apakah Anda yakin ingin melanjutkan?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting} className="rounded-lg">Batal</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={(e) => {
+                e.preventDefault()
+                confirmDelete()
+              }}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600 rounded-lg text-white"
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Menghapus..." : "Hapus Tarif"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

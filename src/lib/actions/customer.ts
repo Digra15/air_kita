@@ -14,7 +14,14 @@ export async function getCustomers() {
         createdAt: 'desc'
       }
     })
-    return customers
+    return customers.map(customer => ({
+      ...customer,
+      tariff: customer.tariff ? {
+        ...customer.tariff,
+        ratePerCubic: customer.tariff.ratePerCubic.toNumber(),
+        baseFee: customer.tariff.baseFee.toNumber(),
+      } : null
+    }))
   } catch (error) {
     console.error("Failed to fetch customers:", error)
     return []
@@ -54,6 +61,7 @@ export async function updateCustomer(id: string, formData: FormData) {
       const name = formData.get('name') as string
       const address = formData.get('address') as string
       const phone = formData.get('phone') as string
+      const tariffId = formData.get('tariffId') as string
       const status = formData.get('status') as CustomerStatus
       
       await db.customer.update({
@@ -62,6 +70,7 @@ export async function updateCustomer(id: string, formData: FormData) {
           name,
           address,
           phoneNumber: phone,
+          tariffId: tariffId || undefined,
           status
         }
       })
@@ -88,7 +97,11 @@ export async function deleteCustomer(id: string) {
 export async function getTariffs() {
     try {
         const tariffs = await db.tariff.findMany()
-        return tariffs
+        return tariffs.map(tariff => ({
+            ...tariff,
+            ratePerCubic: tariff.ratePerCubic.toNumber(),
+            baseFee: tariff.baseFee.toNumber()
+        }))
     } catch {
         return []
     }

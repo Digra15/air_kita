@@ -28,15 +28,17 @@ export function RecentSales({ data }: RecentSalesProps) {
                 data.map((sale) => (
                     <div key={sale.id} className="flex items-center">
                         <Avatar className="h-9 w-9">
-                            <AvatarFallback>{sale.customer.name.substring(0, 2).toUpperCase()}</AvatarFallback>
+                            <AvatarFallback className="bg-blue-100 text-blue-700 font-bold text-xs">
+                                {sale.customer.name.substring(0, 2).toUpperCase()}
+                            </AvatarFallback>
                         </Avatar>
                         <div className="ml-4 space-y-1">
-                            <p className="text-sm font-medium leading-none">{sale.customer.name}</p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm font-bold text-slate-800 leading-none">{sale.customer.name}</p>
+                            <p className="text-xs text-slate-500">
                                 {sale.customer.meterNumber}
                             </p>
                         </div>
-                        <div className="ml-auto font-medium">
+                        <div className="ml-auto font-bold text-slate-900">
                             +{formatCurrency(Number(sale.amount))}
                         </div>
                     </div>

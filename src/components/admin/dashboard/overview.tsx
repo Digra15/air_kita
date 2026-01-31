@@ -34,9 +34,8 @@ export function Overview({ data }: OverviewProps) {
                 />
                 <Bar
                     dataKey="total"
-                    fill="#adfa1d" // Bright green/lime
+                    fill="#3b82f6"
                     radius={[4, 4, 0, 0]}
-                    className="fill-primary"
                 />
             </BarChart>
         </ResponsiveContainer>
