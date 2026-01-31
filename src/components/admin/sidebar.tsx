@@ -12,14 +12,15 @@ import {
   BarChart3,
   Settings,
   LogOut,
-  Shield
+  Shield,
+  LucideIcon
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { signOut } from 'next-auth/react'
 
 interface Route {
   label: string
-  icon: any
+  icon: LucideIcon
   href: string
   color: string
   roles?: string[]
@@ -113,7 +114,7 @@ export function Sidebar({
         </Link>
         <div className="space-y-1">
           {routes.map((route) => {
-            if (route.roles && userRole && !route.roles.includes(userRole as any)) {
+            if (route.roles && userRole && !route.roles.includes(userRole)) {
               return null;
             }
             
@@ -122,12 +123,14 @@ export function Sidebar({
                 key={route.href}
                 href={route.href}
                 className={cn(
-                  "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-blue-600 hover:bg-blue-50/80 rounded-xl transition-all duration-200",
-                  pathname === route.href ? "text-blue-600 bg-blue-50 font-semibold shadow-sm shadow-blue-100" : "text-slate-500"
+                  "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer rounded-xl transition-all duration-200 mb-1",
+                  pathname === route.href 
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-200" 
+                    : "text-slate-500 hover:text-blue-600 hover:bg-blue-50"
                 )}
               >
                 <div className={cn("flex items-center flex-1")}>
-                  <route.icon className={cn("h-5 w-5 mr-3 transition-colors", route.color, pathname === route.href ? "text-blue-600" : "text-slate-400 group-hover:text-blue-500")} />
+                  <route.icon className={cn("h-5 w-5 mr-3 transition-colors", pathname === route.href ? "text-white" : "text-slate-400 group-hover:text-blue-600")} />
                   {route.label}
                 </div>
               </Link>

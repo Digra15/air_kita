@@ -121,7 +121,7 @@ export function BillTable({ data }: BillTableProps) {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="w-[200px] text-xs font-bold uppercase tracking-wider text-muted-foreground">NO. INVOICE</TableHead>
+                        <TableHead className="w-[200px] text-xs font-bold uppercase tracking-wider text-muted-foreground hidden md:table-cell">NO. INVOICE</TableHead>
                         <TableHead className="text-xs font-bold uppercase tracking-wider text-muted-foreground">NAMA PELANGGAN</TableHead>
                         <TableHead className="text-xs font-bold uppercase tracking-wider text-muted-foreground">JUMLAH</TableHead>
                         <TableHead className="text-xs font-bold uppercase tracking-wider text-muted-foreground">STATUS</TableHead>
@@ -138,7 +138,7 @@ export function BillTable({ data }: BillTableProps) {
                     ) : (
                         data.map((bill) => (
                             <TableRow key={bill.id}>
-                                <TableCell className="font-medium text-muted-foreground text-xs">
+                                <TableCell className="font-medium text-muted-foreground text-xs hidden md:table-cell">
                                     INV/{bill.reading.year}/{bill.reading.month}/{bill.id.substring(0, 3).toUpperCase()}
                                 </TableCell>
                                 <TableCell>

@@ -251,10 +251,10 @@ export function AccountingView({ data, companyName, companyAddress }: Accounting
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-8">
       
       {/* Hero Section - Neraca Rugi Laba (Estimasi) */}
-      <div className="relative overflow-hidden rounded-2xl bg-[#0f172a] p-8 text-white shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+      <div className="relative overflow-hidden rounded-2xl bg-[#0f172a] p-8 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all duration-300">
         <div className="absolute top-0 right-0 -mt-4 -mr-4 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 -mb-4 -ml-4 h-64 w-64 rounded-full bg-purple-500/10 blur-3xl"></div>
         
@@ -419,7 +419,7 @@ export function AccountingView({ data, companyName, companyAddress }: Accounting
 
         {/* Laba Rugi Content */}
         <TabsContent value="pl">
-            <Card className="shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+            <Card className="shadow-md hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="uppercase tracking-wide text-gray-700">Laporan Laba Rugi Detail</CardTitle>
                     <Button size="sm" variant="outline" onClick={() => exportPDF('pl')} className="gap-2 border-blue-200 text-blue-700 hover:bg-blue-50">

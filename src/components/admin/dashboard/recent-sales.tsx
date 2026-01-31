@@ -28,8 +28,7 @@ export function RecentSales({ data }: RecentSalesProps) {
                 data.map((sale, index) => (
                     <div 
                         key={sale.id} 
-                        className="flex items-center p-2 rounded-lg hover:bg-slate-50 transition-all duration-300 hover:shadow-md hover:scale-[1.01] animate-in fade-in slide-in-from-left-4 fill-mode-forwards"
-                        style={{ animationDelay: `${index * 100}ms` }}
+                        className="flex items-center p-2 rounded-lg hover:bg-slate-50 transition-colors duration-200"
                     >
                         <Avatar className="h-9 w-9 ring-2 ring-white shadow-sm">
                             <AvatarFallback className="bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 font-bold text-xs">

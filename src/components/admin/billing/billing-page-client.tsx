@@ -225,9 +225,9 @@ export function BillingPageClient({ bills, companyName, companyAddress }: Billin
                 Keeping them visible as they provide context.
             */}
             <div className="grid gap-4 md:grid-cols-3">
-                <Card className="bg-white animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <Card className="bg-white shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
                     <CardContent className="p-6 flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 animate-in zoom-in duration-500 delay-200">
+                        <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 group-hover:scale-110 transition-transform duration-300">
                             <CheckCircle className="h-6 w-6" />
                         </div>
                         <div>
@@ -237,9 +237,9 @@ export function BillingPageClient({ bills, companyName, companyAddress }: Billin
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-white animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <Card className="bg-white shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
                     <CardContent className="p-6 flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 animate-in zoom-in duration-500 delay-300">
+                        <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 group-hover:scale-110 transition-transform duration-300">
                             <AlertCircle className="h-6 w-6" />
                         </div>
                         <div>
@@ -249,9 +249,9 @@ export function BillingPageClient({ bills, companyName, companyAddress }: Billin
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-white animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <Card className="bg-white shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
                     <CardContent className="p-6 flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 animate-in zoom-in duration-500 delay-400">
+                        <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-300">
                             <DollarSign className="h-6 w-6" />
                         </div>
                         <div>

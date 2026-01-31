@@ -47,7 +47,7 @@ export default async function DashboardPage() {
             {/* Stats Cards */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                 {/* Revenue Card */}
-                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 rounded-2xl bg-gradient-to-br from-white to-emerald-50/50 border-l-4 border-l-emerald-500 animate-in fade-in slide-in-from-bottom-4 fill-mode-forwards">
+                <Card className="border-none shadow-sm group hover:shadow-xl hover:scale-[1.02] transition-all duration-300 rounded-2xl bg-gradient-to-br from-white to-emerald-50/50 border-l-4 border-l-emerald-500">
                     <CardContent className="p-6">
                         <div className="flex items-center justify-between mb-4">
                             <div className="h-12 w-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
@@ -68,10 +68,10 @@ export default async function DashboardPage() {
                 </Card>
 
                 {/* Water Usage Card */}
-                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 delay-100 rounded-2xl bg-gradient-to-br from-white to-blue-50/50 border-l-4 border-l-blue-500 animate-in fade-in slide-in-from-bottom-4 fill-mode-forwards" style={{ animationDelay: '100ms' }}>
+                <Card className="border-none shadow-sm rounded-2xl bg-gradient-to-br from-white to-blue-50/50 border-l-4 border-l-blue-500">
                     <CardContent className="p-6">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="h-12 w-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                            <div className="h-12 w-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
                                 <Droplets className="h-6 w-6" />
                             </div>
                             <div className="px-2.5 py-1 rounded-full bg-white shadow-sm border border-blue-100 text-blue-600 text-xs font-bold flex items-center gap-1">
@@ -89,10 +89,10 @@ export default async function DashboardPage() {
                 </Card>
 
                 {/* Active Users Card */}
-                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 delay-200 rounded-2xl bg-gradient-to-br from-white to-violet-50/50 border-l-4 border-l-violet-500 animate-in fade-in slide-in-from-bottom-4 fill-mode-forwards" style={{ animationDelay: '200ms' }}>
+                <Card className="border-none shadow-sm rounded-2xl bg-gradient-to-br from-white to-violet-50/50 border-l-4 border-l-violet-500">
                     <CardContent className="p-6">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="h-12 w-12 rounded-2xl bg-violet-100 flex items-center justify-center text-violet-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                            <div className="h-12 w-12 rounded-2xl bg-violet-100 flex items-center justify-center text-violet-600 shadow-sm">
                                 <Users className="h-6 w-6" />
                             </div>
                             <div className="px-2.5 py-1 rounded-full bg-white shadow-sm border border-violet-100 text-violet-600 text-xs font-bold flex items-center gap-1">
@@ -110,10 +110,10 @@ export default async function DashboardPage() {
                 </Card>
 
                 {/* System Health Card (Placeholder for 4th card) */}
-                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 delay-300 rounded-2xl bg-gradient-to-br from-white to-orange-50/50 border-l-4 border-l-orange-500 animate-in fade-in slide-in-from-bottom-4 fill-mode-forwards" style={{ animationDelay: '300ms' }}>
+                <Card className="border-none shadow-sm rounded-2xl bg-gradient-to-br from-white to-orange-50/50 border-l-4 border-l-orange-500">
                     <CardContent className="p-6">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="h-12 w-12 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
+                            <div className="h-12 w-12 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm">
                                 <Activity className="h-6 w-6" />
                             </div>
                             <div className="px-2.5 py-1 rounded-full bg-white shadow-sm border border-orange-100 text-orange-600 text-xs font-bold flex items-center gap-1">

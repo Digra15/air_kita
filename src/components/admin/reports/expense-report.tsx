@@ -102,9 +102,9 @@ export function ExpenseReport({ data }: ExpenseReportProps) {
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-3">
         {/* Card 1: Gaji & HR */}
-        <Card className="bg-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-none ring-1 ring-gray-100 animate-in fade-in slide-in-from-bottom-4 delay-100">
+        <Card className="bg-white shadow-sm border-none ring-1 ring-gray-100">
           <CardHeader className="pb-2">
-            <div className="h-10 w-10 rounded-lg bg-red-50 flex items-center justify-center mb-2 animate-in zoom-in duration-500 delay-200">
+            <div className="h-10 w-10 rounded-lg bg-red-50 flex items-center justify-center mb-2">
                <TrendingDown className="h-5 w-5 text-red-600" />
             </div>
             <CardTitle className="text-xs font-bold text-gray-500 uppercase tracking-wider">GAJI & HR</CardTitle>
@@ -118,9 +118,9 @@ export function ExpenseReport({ data }: ExpenseReportProps) {
         </Card>
 
         {/* Card 2: Operasional & Listrik */}
-        <Card className="bg-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-none ring-1 ring-gray-100 animate-in fade-in slide-in-from-bottom-4 delay-200">
+        <Card className="bg-white shadow-sm border-none ring-1 ring-gray-100">
           <CardHeader className="pb-2">
-            <div className="h-10 w-10 rounded-lg bg-orange-50 flex items-center justify-center mb-2 animate-in zoom-in duration-500 delay-300">
+            <div className="h-10 w-10 rounded-lg bg-orange-50 flex items-center justify-center mb-2">
                <TrendingDown className="h-5 w-5 text-orange-600" />
             </div>
             <CardTitle className="text-xs font-bold text-gray-500 uppercase tracking-wider">OPERASIONAL & LISTRIK</CardTitle>
@@ -134,9 +134,9 @@ export function ExpenseReport({ data }: ExpenseReportProps) {
         </Card>
 
         {/* Card 3: Maintenance Pipa */}
-        <Card className="bg-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-none ring-1 ring-gray-100 animate-in fade-in slide-in-from-bottom-4 delay-300">
+        <Card className="bg-white shadow-sm border-none ring-1 ring-gray-100">
           <CardHeader className="pb-2">
-            <div className="h-10 w-10 rounded-lg bg-blue-50 flex items-center justify-center mb-2 animate-in zoom-in duration-500 delay-400">
+            <div className="h-10 w-10 rounded-lg bg-blue-50 flex items-center justify-center mb-2">
                <TrendingDown className="h-5 w-5 text-blue-600" />
             </div>
             <CardTitle className="text-xs font-bold text-gray-500 uppercase tracking-wider">MAINTENANCE PIPA</CardTitle>
@@ -151,7 +151,7 @@ export function ExpenseReport({ data }: ExpenseReportProps) {
       </div>
 
       {/* Detail Journal Table */}
-      <Card className="border-none shadow-md animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500">
+      <Card className="border-none shadow-md">
         <CardHeader className="bg-white border-b px-6 py-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>

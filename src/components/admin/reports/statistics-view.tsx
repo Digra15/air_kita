@@ -60,14 +60,14 @@ export function StatisticsView({ data }: StatisticsViewProps) {
   const profitMargin = totalIncome > 0 ? (netProfit / totalIncome) * 100 : 0
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="bg-gradient-to-br from-blue-50 to-white border-blue-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <Card className="bg-gradient-to-br from-blue-50 to-white border-blue-100 shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-blue-900">Total Pemasukan</CardTitle>
-            <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-              <Wallet className="h-4 w-4 text-blue-600 animate-in zoom-in duration-500 delay-200" />
+            <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <Wallet className="h-4 w-4 text-blue-600" />
             </div>
           </CardHeader>
           <CardContent>
@@ -79,11 +79,11 @@ export function StatisticsView({ data }: StatisticsViewProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-50 to-white border-red-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <Card className="bg-gradient-to-br from-red-50 to-white border-red-100 shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-red-900">Total Pengeluaran</CardTitle>
-            <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center">
-              <Activity className="h-4 w-4 text-red-600 animate-in zoom-in duration-500 delay-200" />
+            <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <Activity className="h-4 w-4 text-red-600" />
             </div>
           </CardHeader>
           <CardContent>
@@ -95,11 +95,11 @@ export function StatisticsView({ data }: StatisticsViewProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-white border-green-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <Card className="bg-gradient-to-br from-green-50 to-white border-green-100 shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-green-900">Net Profit</CardTitle>
-            <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-              <DollarSign className="h-4 w-4 text-green-600 animate-in zoom-in duration-500 delay-200" />
+            <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <DollarSign className="h-4 w-4 text-green-600" />
             </div>
           </CardHeader>
           <CardContent>
@@ -114,7 +114,7 @@ export function StatisticsView({ data }: StatisticsViewProps) {
 
       <div className="grid gap-4 md:grid-cols-7">
         {/* Main Chart */}
-        <Card className="col-span-4 shadow-md border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <Card className="col-span-4 shadow-md border-gray-100 group hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
           <CardHeader>
             <CardTitle className="text-lg font-bold text-gray-800">Analisis Keuangan</CardTitle>
             <CardDescription>Grafik tren pemasukan vs pengeluaran per bulan</CardDescription>
@@ -183,7 +183,7 @@ export function StatisticsView({ data }: StatisticsViewProps) {
         </Card>
 
         {/* Monthly Performance List */}
-        <Card className="col-span-3 shadow-md border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <Card className="col-span-3 shadow-md border-gray-100 hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
           <CardHeader>
             <CardTitle className="text-lg font-bold text-gray-800">Performa Bulanan</CardTitle>
             <CardDescription>Ringkasan profitabilitas per periode</CardDescription>

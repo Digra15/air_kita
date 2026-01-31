@@ -65,9 +65,9 @@ export function CustomerTable({ data, tariffs = [] }: CustomerTableProps) {
         <TableHeader>
           <TableRow className="hover:bg-transparent">
             <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">NAMA PELANGGAN</TableHead>
-            <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">ALAMAT</TableHead>
+            <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider hidden md:table-cell">ALAMAT</TableHead>
             <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">NO. METER</TableHead>
-            <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">GOLONGAN</TableHead>
+            <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider hidden md:table-cell">GOLONGAN</TableHead>
             <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">STATUS</TableHead>
             <TableHead className="text-right text-xs font-bold text-slate-400 uppercase tracking-wider print:hidden">AKSI</TableHead>
           </TableRow>
@@ -85,11 +85,11 @@ export function CustomerTable({ data, tariffs = [] }: CustomerTableProps) {
                 <TableCell>
                     <span className="font-bold text-slate-900">{customer.name}</span>
                 </TableCell>
-                <TableCell>
+                <TableCell className="hidden md:table-cell">
                     <span className="text-xs text-slate-500">{customer.address}</span>
                 </TableCell>
                 <TableCell className="font-medium text-slate-600">{customer.meterNumber}</TableCell>
-                <TableCell>
+                <TableCell className="hidden md:table-cell">
                     <Badge variant="secondary" className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-none rounded-md px-2 py-0.5 text-[10px] font-bold uppercase">
                         {customer.tariff?.name || '-'}
                     </Badge>

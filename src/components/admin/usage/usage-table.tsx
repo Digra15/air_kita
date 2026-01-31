@@ -63,8 +63,8 @@ export function UsageTable({ data }: UsageTableProps) {
         <TableHeader className="bg-slate-50">
           <TableRow className="hover:bg-transparent border-b border-slate-100">
             <TableHead className="w-[250px] py-4 text-xs font-bold text-slate-400 uppercase tracking-wider pl-6">PELANGGAN</TableHead>
-            <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">AWAL (M³)</TableHead>
-            <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">AKHIR (M³)</TableHead>
+            <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider hidden md:table-cell">AWAL (M³)</TableHead>
+            <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider hidden md:table-cell">AKHIR (M³)</TableHead>
             <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">PEMAKAIAN (M³)</TableHead>
             <TableHead className="text-xs font-bold text-slate-400 uppercase tracking-wider">STATUS</TableHead>
             <TableHead className="text-right text-xs font-bold text-slate-400 uppercase tracking-wider pr-6">AKSI</TableHead>
@@ -91,8 +91,8 @@ export function UsageTable({ data }: UsageTableProps) {
                         </div>
                     </div>
                 </TableCell>
-                <TableCell className="font-medium text-slate-600">{item.initialReading.toLocaleString('id-ID')}</TableCell>
-                <TableCell className="font-medium text-slate-600">{item.currentReading.toLocaleString('id-ID')}</TableCell>
+                <TableCell className="font-medium text-slate-600 hidden md:table-cell">{item.initialReading.toLocaleString('id-ID')}</TableCell>
+                <TableCell className="font-medium text-slate-600 hidden md:table-cell">{item.currentReading.toLocaleString('id-ID')}</TableCell>
                 <TableCell>
                     <Badge variant="secondary" className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-none rounded-md px-2 py-1 font-bold">
                         {item.usageAmount.toLocaleString('id-ID')} m³

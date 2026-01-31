@@ -23,7 +23,7 @@ export default async function AdminLayout({
         <div className="print:hidden">
             <Navbar companyName={companyName} companyLogo={companyLogo} userRole={userRole} />
         </div>
-        <div className="p-8 print:p-0">
+        <div className="p-4 md:p-8 print:p-0">
             {children}
         </div>
       </main>

@@ -206,10 +206,10 @@ export function IncomeReport({ data }: IncomeReportProps) {
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="bg-white border-l-4 border-l-blue-500 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-100">
+        <Card className="bg-white border-l-4 border-l-blue-500 shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Pemasukan Tagihan</CardTitle>
-            <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center animate-in zoom-in duration-500 delay-200">
+            <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                <Wallet className="h-4 w-4 text-blue-600" />
             </div>
           </CardHeader>
@@ -221,10 +221,10 @@ export function IncomeReport({ data }: IncomeReportProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-l-4 border-l-green-500 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-200">
+        <Card className="bg-white border-l-4 border-l-green-500 shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Pemasukan Non-Tagihan</CardTitle>
-            <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center animate-in zoom-in duration-500 delay-300">
+            <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <Banknote className="h-4 w-4 text-green-600" />
             </div>
           </CardHeader>
@@ -236,10 +236,10 @@ export function IncomeReport({ data }: IncomeReportProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-slate-900 text-white border-none shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-300">
+        <Card className="bg-slate-900 text-white border-none shadow-md group hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-slate-300">Total Pemasukan</CardTitle>
-            <TrendingUp className="h-4 w-4 text-emerald-400 animate-in zoom-in duration-500 delay-400" />
+            <TrendingUp className="h-4 w-4 text-emerald-400 group-hover:scale-110 transition-transform duration-300" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-emerald-400">{formatCurrency(stats.totalIncome)}</div>
@@ -251,7 +251,7 @@ export function IncomeReport({ data }: IncomeReportProps) {
       </div>
 
       {/* Detail Journal Table */}
-      <Card className="border-none shadow-md animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500">
+      <Card className="border-none shadow-md">
         <CardHeader className="bg-white border-b px-6 py-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
