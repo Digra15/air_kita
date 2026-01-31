@@ -416,10 +416,10 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                 <TabsContent value="summary" className="space-y-6">
                     {/* Summary Cards */}
                     <div className="grid gap-4 md:grid-cols-4">
-                        <Card>
+                        <Card className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                             <CardContent className="p-6">
                                 <div className="flex items-center gap-4">
-                                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 animate-in zoom-in duration-500 delay-200">
                                         <Wallet className="h-5 w-5" />
                                     </div>
                                     <div>
@@ -429,10 +429,10 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                 </div>
                             </CardContent>
                         </Card>
-                        <Card>
+                        <Card className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                             <CardContent className="p-6">
                                 <div className="flex items-center gap-4">
-                                    <div className="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+                                    <div className="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 animate-in zoom-in duration-500 delay-300">
                                         <ArrowUpRight className="h-5 w-5" />
                                     </div>
                                     <div>
@@ -442,10 +442,10 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                 </div>
                             </CardContent>
                         </Card>
-                        <Card>
+                        <Card className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                             <CardContent className="p-6">
                                 <div className="flex items-center gap-4">
-                                    <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                                    <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 animate-in zoom-in duration-500 delay-400">
                                         <ArrowDownRight className="h-5 w-5" />
                                     </div>
                                     <div>
@@ -455,10 +455,10 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                 </div>
                             </CardContent>
                         </Card>
-                        <Card>
+                        <Card className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-400 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                             <CardContent className="p-6">
                                 <div className="flex items-center gap-4">
-                                    <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
+                                    <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 animate-in zoom-in duration-500 delay-500">
                                         <Briefcase className="h-5 w-5" />
                                     </div>
                                     <div>
@@ -472,7 +472,7 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
 
                     <div className="grid gap-6 md:grid-cols-3">
                         {/* Recent Transactions */}
-                        <Card className="md:col-span-2">
+                        <Card className="md:col-span-2 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                             <CardHeader>
                                 <div className="flex justify-between items-center">
                                     <CardTitle className="text-lg">Aliran Kas Terakhir</CardTitle>

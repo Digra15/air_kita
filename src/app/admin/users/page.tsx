@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default async function UsersPage() {
   const result = await getUsers()
-  const users = result.success ? result.data : []
+  const users = (result.success && result.data) ? result.data : []
 
   return (
     <div className="space-y-6">

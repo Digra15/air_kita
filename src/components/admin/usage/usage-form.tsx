@@ -36,6 +36,8 @@ interface UsageFormProps {
     }[]
 }
 
+type Customer = NonNullable<UsageFormProps["customers"]>[number]
+
 import {
   Select,
   SelectContent,
@@ -48,7 +50,7 @@ export function UsageForm({ customers }: UsageFormProps) {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
     const [loading, setLoading] = useState(false)
-    const [selectedCustomer, setSelectedCustomer] = useState<UsageFormProps["customers"][number] | null>(null)
+    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
 
     // Default to current month/year
     const now = new Date()

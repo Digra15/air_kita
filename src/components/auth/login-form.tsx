@@ -12,13 +12,9 @@ import { CheckCircle2 } from 'lucide-react'
 export default function LoginForm() {
   const [errorMessage, dispatch, isPending] = useActionState(authenticate, undefined)
   const searchParams = useSearchParams()
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (searchParams.get('registered') === 'true') {
-      setSuccessMessage('Akun berhasil dibuat. Silakan login.')
-    }
-  }, [searchParams])
+  const [successMessage, setSuccessMessage] = useState<string | null>(
+    searchParams.get('registered') === 'true' ? 'Akun berhasil dibuat. Silakan login.' : null
+  )
 
   return (
     <div className="space-y-6">

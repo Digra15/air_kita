@@ -58,23 +58,23 @@ export function ReportsPageClient({ transactions, usageData, companyName, compan
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="usage" className="space-y-4">
+        <TabsContent value="usage" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <UsageReport data={usageData} />
         </TabsContent>
         
-        <TabsContent value="income" className="space-y-4">
+        <TabsContent value="income" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <IncomeReport data={transactions} />
         </TabsContent>
         
-        <TabsContent value="expense" className="space-y-4">
+        <TabsContent value="expense" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
            <ExpenseReport data={transactions} />
         </TabsContent>
         
-        <TabsContent value="stats" className="space-y-4">
+        <TabsContent value="stats" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <StatisticsView data={transactions} />
         </TabsContent>
 
-        <TabsContent value="accounting" className="space-y-4">
+        <TabsContent value="accounting" className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <AccountingView 
             data={transactions} 
             companyName={companyName}

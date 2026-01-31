@@ -16,9 +16,16 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { signOut } from 'next-auth/react'
-import { Role } from '@prisma/client'
 
-const routes = [
+interface Route {
+  label: string
+  icon: any
+  href: string
+  color: string
+  roles?: string[]
+}
+
+const routes: Route[] = [
   {
     label: 'Dashboard',
     icon: LayoutDashboard,
@@ -88,9 +95,9 @@ export function Sidebar({
 
   return (
     <div className="space-y-4 py-4 flex flex-col h-full bg-white text-slate-800 border-r print:hidden">
-      <div className="px-3 py-2 flex-1">
+      <div className="px-3 py-2 flex-1 overflow-y-auto custom-scrollbar">
         <Link href="/admin/dashboard" className="flex items-center pl-3 mb-10">
-          <div className="relative w-10 h-10 mr-3 flex items-center justify-center bg-blue-600 rounded-xl shadow-lg shadow-blue-200">
+          <div className="relative w-10 h-10 mr-3 flex items-center justify-center bg-blue-600 rounded-xl shadow-lg shadow-blue-200 group-hover:scale-110 transition-transform">
              {companyLogo ? (
                <Image src={companyLogo} alt="Logo" fill className="object-contain p-1" />
              ) : (
@@ -98,41 +105,54 @@ export function Sidebar({
              )}
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 leading-none">
-                {companyName}
+            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-indigo-700">
+              {companyName}
             </h1>
-            <span className="text-[10px] font-bold text-blue-600 tracking-wider uppercase">Enterprise</span>
+            <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">Admin Portal</p>
           </div>
         </Link>
         <div className="space-y-1">
-          {routes.filter(route => !route.roles || (userRole && route.roles.includes(userRole))).map((route) => (
-            <Link
-              key={route.href}
-              href={route.href}
-              className={cn(
-                "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer rounded-xl transition-all duration-200",
-                pathname === route.href 
-                    ? "text-white bg-blue-600 shadow-md shadow-blue-200" 
-                    : "text-slate-500 hover:text-blue-600 hover:bg-blue-50"
-              )}
-            >
-              <div className="flex items-center flex-1">
-                <route.icon className={cn("h-5 w-5 mr-3", pathname === route.href ? "text-white" : route.color)} />
-                {route.label}
-              </div>
-            </Link>
-          ))}
+          {routes.map((route) => {
+            if (route.roles && userRole && !route.roles.includes(userRole as any)) {
+              return null;
+            }
+            
+            return (
+              <Link
+                key={route.href}
+                href={route.href}
+                className={cn(
+                  "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-blue-600 hover:bg-blue-50/80 rounded-xl transition-all duration-200",
+                  pathname === route.href ? "text-blue-600 bg-blue-50 font-semibold shadow-sm shadow-blue-100" : "text-slate-500"
+                )}
+              >
+                <div className={cn("flex items-center flex-1")}>
+                  <route.icon className={cn("h-5 w-5 mr-3 transition-colors", route.color, pathname === route.href ? "text-blue-600" : "text-slate-400 group-hover:text-blue-500")} />
+                  {route.label}
+                </div>
+              </Link>
+            )
+          })}
         </div>
       </div>
-      <div className="px-6 py-4 border-t">
-         <Button 
+      <div className="px-3 py-2 border-t bg-slate-50/50">
+        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-4 text-white shadow-lg shadow-blue-200 mx-1 mb-2">
+            <div className="flex items-center gap-2 mb-2">
+                <Shield className="h-5 w-5 opacity-80" />
+                <p className="text-xs font-semibold opacity-90">Keamanan Sistem</p>
+            </div>
+            <p className="text-[10px] opacity-75 leading-relaxed">
+                Sistem terenkripsi dan aman. Jangan bagikan kredensial Anda.
+            </p>
+        </div>
+        <Button 
             variant="ghost" 
-            className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50" 
+            className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl"
             onClick={() => signOut({ callbackUrl: '/login' })}
-         >
+        >
             <LogOut className="h-5 w-5 mr-3" />
-            Logout
-         </Button>
+            Keluar
+        </Button>
       </div>
     </div>
   )

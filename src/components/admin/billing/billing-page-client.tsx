@@ -79,14 +79,14 @@ export function BillingPageClient({ bills, companyName, companyAddress }: Billin
         .reduce((acc, curr) => acc + Number(curr.amount), 0)
     
     const totalArrears = bills
-        .filter(b => b.status === "UNPAID" && (new Date(b.dueDate) < new Date() || b.status === "OVERDUE"))
+        .filter(b => (b.status === "UNPAID" && new Date(b.dueDate) < new Date()) || b.status === "OVERDUE")
         .reduce((acc, curr) => acc + Number(curr.amount), 0)
     
     const averageBill = bills.length > 0 
         ? bills.reduce((acc, curr) => acc + Number(curr.amount), 0) / bills.length 
         : 0
 
-    const arrearsCount = bills.filter(b => b.status === "UNPAID" && (new Date(b.dueDate) < new Date() || b.status === "OVERDUE")).length
+    const arrearsCount = bills.filter(b => (b.status === "UNPAID" && new Date(b.dueDate) < new Date()) || b.status === "OVERDUE").length
 
     // Filter logic
     const filteredBills = bills.filter(bill => {
@@ -183,7 +183,7 @@ export function BillingPageClient({ bills, companyName, companyAddress }: Billin
 
     // Group arrears by customer for critical accounts table
     const criticalAccountsMap = new Map()
-    bills.filter(b => b.status === "UNPAID" && (new Date(b.dueDate) < new Date() || b.status === "OVERDUE"))
+    bills.filter(b => (b.status === "UNPAID" && new Date(b.dueDate) < new Date()) || b.status === "OVERDUE")
          .forEach(bill => {
             if (!criticalAccountsMap.has(bill.customer.meterNumber)) {
                 criticalAccountsMap.set(bill.customer.meterNumber, {
@@ -225,9 +225,9 @@ export function BillingPageClient({ bills, companyName, companyAddress }: Billin
                 Keeping them visible as they provide context.
             */}
             <div className="grid gap-4 md:grid-cols-3">
-                <Card className="bg-white">
+                <Card className="bg-white animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <CardContent className="p-6 flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                        <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 animate-in zoom-in duration-500 delay-200">
                             <CheckCircle className="h-6 w-6" />
                         </div>
                         <div>
@@ -237,9 +237,9 @@ export function BillingPageClient({ bills, companyName, companyAddress }: Billin
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-white">
+                <Card className="bg-white animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <CardContent className="p-6 flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                        <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 animate-in zoom-in duration-500 delay-300">
                             <AlertCircle className="h-6 w-6" />
                         </div>
                         <div>
@@ -249,9 +249,9 @@ export function BillingPageClient({ bills, companyName, companyAddress }: Billin
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="bg-white">
+                <Card className="bg-white animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <CardContent className="p-6 flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                        <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 animate-in zoom-in duration-500 delay-400">
                             <DollarSign className="h-6 w-6" />
                         </div>
                         <div>

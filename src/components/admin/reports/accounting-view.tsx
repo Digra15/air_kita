@@ -254,7 +254,7 @@ export function AccountingView({ data, companyName, companyAddress }: Accounting
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* Hero Section - Neraca Rugi Laba (Estimasi) */}
-      <div className="relative overflow-hidden rounded-2xl bg-[#0f172a] p-8 text-white shadow-xl">
+      <div className="relative overflow-hidden rounded-2xl bg-[#0f172a] p-8 text-white shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
         <div className="absolute top-0 right-0 -mt-4 -mr-4 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 -mb-4 -ml-4 h-64 w-64 rounded-full bg-purple-500/10 blur-3xl"></div>
         
@@ -351,7 +351,7 @@ export function AccountingView({ data, companyName, companyAddress }: Accounting
 
         {/* Buku Besar / Ledger Content */}
         <TabsContent value="ledger">
-          <Card className="border-t-4 border-t-blue-500 shadow-md">
+          <Card className="border-t-4 border-t-blue-500 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="text-xl font-bold text-gray-800 uppercase tracking-wide">Buku Besar / Ledger</CardTitle>
@@ -419,7 +419,7 @@ export function AccountingView({ data, companyName, companyAddress }: Accounting
 
         {/* Laba Rugi Content */}
         <TabsContent value="pl">
-            <Card className="shadow-md">
+            <Card className="shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="uppercase tracking-wide text-gray-700">Laporan Laba Rugi Detail</CardTitle>
                     <Button size="sm" variant="outline" onClick={() => exportPDF('pl')} className="gap-2 border-blue-200 text-blue-700 hover:bg-blue-50">
@@ -483,7 +483,7 @@ export function AccountingView({ data, companyName, companyAddress }: Accounting
               </Button>
             </div>
             <div className="grid gap-6 md:grid-cols-2">
-                <Card className="shadow-md">
+                <Card className="shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <CardHeader className="bg-blue-50/50 pb-4">
                         <CardTitle className="text-blue-700 uppercase text-sm tracking-wider">Aktiva (Assets)</CardTitle>
                     </CardHeader>
@@ -509,7 +509,7 @@ export function AccountingView({ data, companyName, companyAddress }: Accounting
                     </CardContent>
                 </Card>
 
-                <Card className="shadow-md">
+                <Card className="shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                     <CardHeader className="bg-purple-50/50 pb-4">
                         <CardTitle className="text-purple-700 uppercase text-sm tracking-wider">Pasiva (Liabilities & Equity)</CardTitle>
                     </CardHeader>
@@ -540,7 +540,7 @@ export function AccountingView({ data, companyName, companyAddress }: Accounting
 
         {/* Arus Kas Content */}
         <TabsContent value="cashflow">
-             <Card className="shadow-md">
+             <Card className="shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="uppercase tracking-wide text-gray-700">Laporan Arus Kas (Cash Flow)</CardTitle>
                     <Button size="sm" variant="outline" onClick={() => exportPDF('cashflow')} className="gap-2 border-blue-200 text-blue-700 hover:bg-blue-50">
@@ -597,7 +597,7 @@ export function AccountingView({ data, companyName, companyAddress }: Accounting
                         </div>
 
                         {/* Summary */}
-                        <div className="flex justify-between items-center bg-blue-600 text-white p-6 rounded-xl shadow-lg">
+                        <div className="flex justify-between items-center bg-blue-600 text-white p-6 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                             <div>
                                 <p className="text-blue-100 text-sm font-medium uppercase tracking-wider">Saldo Kas Akhir</p>
                                 <h3 className="text-3xl font-bold mt-1">{formatCurrency(assets.cash)}</h3>

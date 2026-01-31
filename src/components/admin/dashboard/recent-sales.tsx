@@ -25,20 +25,25 @@ export function RecentSales({ data }: RecentSalesProps) {
             {data.length === 0 ? (
                 <p className="text-sm text-center text-muted-foreground">Belum ada transaksi.</p>
             ) : (
-                data.map((sale) => (
-                    <div key={sale.id} className="flex items-center">
-                        <Avatar className="h-9 w-9">
-                            <AvatarFallback className="bg-blue-100 text-blue-700 font-bold text-xs">
+                data.map((sale, index) => (
+                    <div 
+                        key={sale.id} 
+                        className="flex items-center p-2 rounded-lg hover:bg-slate-50 transition-all duration-300 hover:shadow-md hover:scale-[1.01] animate-in fade-in slide-in-from-left-4 fill-mode-forwards"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                        <Avatar className="h-9 w-9 ring-2 ring-white shadow-sm">
+                            <AvatarFallback className="bg-gradient-to-br from-blue-100 to-indigo-100 text-blue-700 font-bold text-xs">
                                 {sale.customer.name.substring(0, 2).toUpperCase()}
                             </AvatarFallback>
                         </Avatar>
                         <div className="ml-4 space-y-1">
                             <p className="text-sm font-bold text-slate-800 leading-none">{sale.customer.name}</p>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs text-slate-500 flex items-center gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                 {sale.customer.meterNumber}
                             </p>
                         </div>
-                        <div className="ml-auto font-bold text-slate-900">
+                        <div className="ml-auto font-bold text-slate-900 bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full text-xs border border-emerald-100">
                             +{formatCurrency(Number(sale.amount))}
                         </div>
                     </div>

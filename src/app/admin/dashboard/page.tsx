@@ -47,10 +47,10 @@ export default async function DashboardPage() {
             {/* Stats Cards */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                 {/* Revenue Card */}
-                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-2xl bg-gradient-to-br from-white to-emerald-50/30 border-l-4 border-l-emerald-500">
+                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 rounded-2xl bg-gradient-to-br from-white to-emerald-50/50 border-l-4 border-l-emerald-500 animate-in fade-in slide-in-from-bottom-4 fill-mode-forwards">
                     <CardContent className="p-6">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="h-12 w-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                            <div className="h-12 w-12 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
                                 <DollarSign className="h-6 w-6" />
                             </div>
                             <div className="px-2.5 py-1 rounded-full bg-white shadow-sm border border-emerald-100 text-emerald-600 text-xs font-bold flex items-center gap-1">
@@ -68,10 +68,10 @@ export default async function DashboardPage() {
                 </Card>
 
                 {/* Water Usage Card */}
-                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-2xl bg-gradient-to-br from-white to-blue-50/30 border-l-4 border-l-blue-500">
+                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 delay-100 rounded-2xl bg-gradient-to-br from-white to-blue-50/50 border-l-4 border-l-blue-500 animate-in fade-in slide-in-from-bottom-4 fill-mode-forwards" style={{ animationDelay: '100ms' }}>
                     <CardContent className="p-6">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="h-12 w-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                            <div className="h-12 w-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
                                 <Droplets className="h-6 w-6" />
                             </div>
                             <div className="px-2.5 py-1 rounded-full bg-white shadow-sm border border-blue-100 text-blue-600 text-xs font-bold flex items-center gap-1">
@@ -89,10 +89,10 @@ export default async function DashboardPage() {
                 </Card>
 
                 {/* Active Users Card */}
-                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-2xl bg-gradient-to-br from-white to-violet-50/30 border-l-4 border-l-violet-500">
+                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 delay-200 rounded-2xl bg-gradient-to-br from-white to-violet-50/50 border-l-4 border-l-violet-500 animate-in fade-in slide-in-from-bottom-4 fill-mode-forwards" style={{ animationDelay: '200ms' }}>
                     <CardContent className="p-6">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="h-12 w-12 rounded-2xl bg-violet-100 flex items-center justify-center text-violet-600 shadow-sm">
+                            <div className="h-12 w-12 rounded-2xl bg-violet-100 flex items-center justify-center text-violet-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
                                 <Users className="h-6 w-6" />
                             </div>
                             <div className="px-2.5 py-1 rounded-full bg-white shadow-sm border border-violet-100 text-violet-600 text-xs font-bold flex items-center gap-1">
@@ -100,7 +100,7 @@ export default async function DashboardPage() {
                             </div>
                         </div>
                         <div className="space-y-1">
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">PENGGUNA AKTIF</p>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">PELANGGAN AKTIF</p>
                             <div className="flex items-baseline gap-2">
                                 <h3 className="text-2xl font-bold text-slate-900">{formatNumber(stats.customerCount)}</h3>
                                 <ArrowUpRight className="h-4 w-4 text-violet-500" />
@@ -109,19 +109,22 @@ export default async function DashboardPage() {
                     </CardContent>
                 </Card>
 
-                {/* System Status / Pending Bills Card */}
-                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-2xl bg-gradient-to-br from-white to-rose-50/30 border-l-4 border-l-rose-500">
+                {/* System Health Card (Placeholder for 4th card) */}
+                <Card className="border-none shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 delay-300 rounded-2xl bg-gradient-to-br from-white to-orange-50/50 border-l-4 border-l-orange-500 animate-in fade-in slide-in-from-bottom-4 fill-mode-forwards" style={{ animationDelay: '300ms' }}>
                     <CardContent className="p-6">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="h-12 w-12 rounded-2xl bg-rose-100 flex items-center justify-center text-rose-600 shadow-sm">
+                            <div className="h-12 w-12 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-600 shadow-sm group-hover:scale-110 transition-transform duration-300">
                                 <Activity className="h-6 w-6" />
+                            </div>
+                            <div className="px-2.5 py-1 rounded-full bg-white shadow-sm border border-orange-100 text-orange-600 text-xs font-bold flex items-center gap-1">
+                                99.9% <ArrowUpRight className="h-3 w-3" />
                             </div>
                         </div>
                         <div className="space-y-1">
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">STATUS SISTEM</p>
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">UPTIME SISTEM</p>
                             <div className="flex items-baseline gap-2">
-                                <h3 className="text-2xl font-bold text-slate-900">{formatNumber(stats.unpaidBillsCount)}</h3>
-                                <span className="text-xs text-slate-500 font-medium">Tagihan Belum Lunas</span>
+                                <h3 className="text-2xl font-bold text-slate-900">Stabil</h3>
+                                <ArrowUpRight className="h-4 w-4 text-orange-500" />
                             </div>
                         </div>
                     </CardContent>

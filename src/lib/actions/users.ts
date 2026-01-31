@@ -28,7 +28,7 @@ export async function createUser(prevState: any, formData: FormData) {
     if (!validatedData.success) {
       return {
         success: false,
-        error: validatedData.error.errors[0].message,
+        error: validatedData.error.issues[0].message,
       }
     }
 
