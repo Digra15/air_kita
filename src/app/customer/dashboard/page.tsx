@@ -1,4 +1,7 @@
 import { getCustomerDashboardData } from "@/lib/actions/customer-portal"
+
+export const dynamic = 'force-dynamic'
+
 import { UsageChart } from "@/components/customer/usage-chart"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"

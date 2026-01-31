@@ -1,4 +1,7 @@
 import { SettingsPageClient } from "@/components/admin/settings/settings-page-client"
+
+export const dynamic = 'force-dynamic'
+
 import { getSystemSettings } from "@/lib/data/settings"
 import { getUsers } from "@/lib/actions/users"
 import { getDatabaseInfo } from "@/lib/actions/database"
