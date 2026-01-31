@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(CUSTOMER)
+  customer  Customer?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tariff {
+  id           String     @id @default(cuid())
+  name         String
+  ratePerCubic Decimal
+  baseFee      Decimal    @default(0)
+  description  String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  customers    Customer[]
+}
+
+model Customer {
+  id          String         @id @default(cuid())
+  name        String
+  meterNumber String         @unique
+  address     String
+  phoneNumber String?
+  status      CustomerStatus @default(ACTIVE)
+  userId      String?        @unique
+  user        User?          @relation(fields: [userId], references: [id])
+  tariffId    String
+  tariff      Tariff         @relation(fields: [tariffId], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  readings    MeterReading[]
+  bills       Bill[]
+}
+
+enum CustomerStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model MeterReading {
+  id           String   @id @default(cuid())
+  customerId   String
+  customer     Customer @relation(fields: [customerId], references: [id])
+  month        Int
+  year         Int
+  meterReading Decimal
+  usageAmount  Decimal
+  recordedAt   DateTime @default(now())
+  bill         Bill?
+
+  @@unique([customerId, month, year])
+}
+
+model Bill {
+  id        String     @id @default(cuid())
+  customerId String
+  customer   Customer   @relation(fields: [customerId], references: [id])
+  readingId  String     @unique
+  reading    MeterReading @relation(fields: [readingId], references: [id])
+  amount     Decimal
+  status     BillStatus @default(UNPAID)
+  dueDate    DateTime
+  paidAt     DateTime?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+enum BillStatus {
+  UNPAID
+  PAID
+  OVERDUE
+}

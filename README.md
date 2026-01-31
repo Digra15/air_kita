@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Air Kita - Sistem Informasi Pembayaran Air
 
-## Getting Started
+Aplikasi manajemen utilitas air berbasis web yang dibangun dengan Next.js 16, Prisma ORM, dan Vercel Postgres.
 
-First, run the development server:
+## Fitur Utama
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Admin Dashboard**: Manajemen pelanggan, tarif, pencatatan meteran, dan tagihan.
+- **Customer Portal**: Cek tagihan dan riwayat pemakaian air.
+- **Billing System**: Otomatisasi perhitungan tagihan berdasarkan tarif progresif.
+- **Responsive Design**: Tampilan modern dan responsif untuk desktop dan mobile.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Database**: PostgreSQL (via Supabase/Vercel Postgres)
+- **ORM**: Prisma
+- **Styling**: Tailwind CSS
+- **Components**: Shadcn/UI
+- **Auth**: NextAuth.js (v5 Beta)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Persiapan Lokal (Local Setup)
 
-## Learn More
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/Digra15/air_kita.git
+   cd air_kita
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Konfigurasi Environment Variables**
+   Salin `.env.example` ke `.env` (atau buat file `.env` baru) dan isi variabel berikut:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```env
+   # Database Connection (Supabase Transaction Mode - Port 6543 atau Session Mode - Port 5432)
+   DATABASE_URL="postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:5432/postgres"
+   
+   # Direct Connection (Supabase Session Mode - Port 5432) - Untuk Migrasi
+   DIRECT_URL="postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:5432/postgres"
+   
+   # NextAuth Configuration
+   AUTH_SECRET="your-secret-key-min-32-chars" # Generate dengan `openssl rand -base64 32`
+   AUTH_URL="http://localhost:3000" # Ubah ke domain produksi saat deploy
+   ```
 
-## Deploy on Vercel
+4. **Setup Database**
+   ```bash
+   # Generate Prisma Client
+   npx prisma generate
+   
+   # Push Schema ke Database
+   npx prisma db push
+   
+   # (Opsional) Seed Data Awal
+   npx prisma db seed
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. **Jalankan Aplikasi**
+   ```bash
+   npm run dev
+   ```
+   Buka [http://localhost:3000](http://localhost:3000) di browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment (Vercel)
+
+1. Push kode ke GitHub.
+2. Import project di Vercel.
+3. Di bagian **Environment Variables**, tambahkan:
+   - `DATABASE_URL`
+   - `DIRECT_URL`
+   - `AUTH_SECRET`
+   - `AUTH_URL` (Set ke domain Vercel Anda, misal: `https://air-kita.vercel.app`)
+4. Klik **Deploy**.
+
+## Struktur Folder
+
+- `src/app`: Halaman dan routing (Next.js App Router).
+- `src/components`: Komponen UI reusable.
+- `src/lib`: Utility functions dan server actions.
+- `prisma`: Schema database dan seed script.
+
+## Lisensi
+
+Private - Air Kita Project
