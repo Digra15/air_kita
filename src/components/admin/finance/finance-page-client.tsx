@@ -23,8 +23,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import jsPDF from "jspdf"
-import autoTable from "jspdf-autotable"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -65,6 +63,7 @@ import { id as localeId } from "date-fns/locale"
 import { toast } from "sonner"
 import { createTransaction, deleteTransaction, updateTransaction } from "@/lib/actions/finance"
 import { cn } from "@/lib/utils"
+import { useEffect } from "react"
 
 // Types matching Prisma
 type TransactionType = 'CAPITAL' | 'REVENUE' | 'OTHER_INCOME' | 'EXPENSE'
@@ -113,16 +112,44 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
         amount: "",
         category: "",
         description: "",
-        date: new Date().toISOString().split('T')[0]
+        date: "" // Initialize empty to avoid hydration mismatch
     })
 
+    // Initialize date on client side only
+    useEffect(() => {
+        setFormData(prev => {
+            if (prev.date) return prev
+            return {
+                ...prev,
+                date: new Date().toISOString().split('T')[0]
+            }
+        })
+    }, [])
+
+    // Safe formatters
     const formatCurrency = (value: number) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        }).format(value)
+        if (typeof value !== 'number' || isNaN(value)) return "Rp 0"
+        try {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(value)
+        } catch (e) {
+            return "Rp 0"
+        }
+    }
+
+    const formatDate = (dateString: string) => {
+        try {
+            if (!dateString) return "-"
+            const date = new Date(dateString)
+            if (isNaN(date.getTime())) return "-"
+            return format(date, "dd MMM yyyy", { locale: localeId })
+        } catch (e) {
+            return "-"
+        }
     }
 
     // Filter transactions based on active tab and search
@@ -202,42 +229,50 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
     
     const topExpenseCategories = [...topExpenseCategoriesRaw]
     
-    const handleExportExpensePDF = () => {
-        const doc = new jsPDF()
-        
-        // Add Header
-        doc.setFontSize(18)
-        doc.text("Laporan Pengeluaran Operasional", 14, 20)
-        
-        doc.setFontSize(10)
-        doc.text(`Total Pengeluaran: ${formatCurrency(totalExpenseValue)}`, 14, 30)
-        doc.text(`Tanggal Cetak: ${format(new Date(), "dd MMMM yyyy", { locale: localeId })}`, 14, 36)
-        
-        // Prepare table data
-        const tableData = expenseTransactions.map(t => [
-            t.description,
-            t.category,
-            "Admin", // Static PIC
-            "APPROVED", // Static Status
-            format(new Date(t.date), "dd MMM yyyy", { locale: localeId }),
-            `- ${formatCurrency(t.amount)}`
-        ])
-
-        // Add Table
-        autoTable(doc, {
-            startY: 45,
-            head: [['Deskripsi', 'Kategori', 'PIC', 'Status', 'Tanggal', 'Jumlah']],
-            body: tableData,
-            theme: 'grid',
-            headStyles: { fillColor: [220, 38, 38] }, // Red header
-            styles: { fontSize: 9 },
-            columnStyles: {
-                0: { cellWidth: 60 },
-                5: { halign: 'right', textColor: [220, 38, 38] }
-            }
-        })
-
-        doc.save(`laporan-pengeluaran-${format(new Date(), "yyyy-MM-dd")}.pdf`)
+    const handleExportExpensePDF = async () => {
+        try {
+            const jsPDF = (await import("jspdf")).default
+            const autoTable = (await import("jspdf-autotable")).default
+            
+            const doc = new jsPDF()
+            
+            // Add Header
+            doc.setFontSize(18)
+            doc.text("Laporan Pengeluaran Operasional", 14, 20)
+            
+            doc.setFontSize(10)
+            doc.text(`Total Pengeluaran: ${formatCurrency(totalExpenseValue)}`, 14, 30)
+            doc.text(`Tanggal Cetak: ${format(new Date(), "dd MMMM yyyy", { locale: localeId })}`, 14, 36)
+            
+            // Prepare table data
+            const tableData = expenseTransactions.map(t => [
+                t.description,
+                t.category,
+                "Admin", // Static PIC
+                "APPROVED", // Static Status
+                format(new Date(t.date), "dd MMM yyyy", { locale: localeId }),
+                `- ${formatCurrency(t.amount)}`
+            ])
+    
+            // Add Table
+            autoTable(doc, {
+                startY: 45,
+                head: [['Deskripsi', 'Kategori', 'PIC', 'Status', 'Tanggal', 'Jumlah']],
+                body: tableData,
+                theme: 'grid',
+                headStyles: { fillColor: [220, 38, 38] }, // Red header
+                styles: { fontSize: 9 },
+                columnStyles: {
+                    0: { cellWidth: 60 },
+                    5: { halign: 'right', textColor: [220, 38, 38] }
+                }
+            })
+    
+            doc.save(`laporan-pengeluaran-${format(new Date(), "yyyy-MM-dd")}.pdf`)
+        } catch (error) {
+            console.error("Failed to generate PDF:", error)
+            toast.error("Gagal membuat PDF")
+        }
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -328,40 +363,48 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
         setIsDialogOpen(true)
     }
 
-    const handleExportPDF = () => {
-        const doc = new jsPDF()
-        
-        // Add Header
-        doc.setFontSize(18)
-        doc.text("Laporan Pemasukan Lain", 14, 20)
-        
-        doc.setFontSize(10)
-        doc.text(`Total Pemasukan: ${formatCurrency(totalOtherIncome)}`, 14, 30)
-        doc.text(`Tanggal Cetak: ${format(new Date(), "dd MMMM yyyy", { locale: localeId })}`, 14, 36)
-        
-        // Prepare table data
-        const tableData = otherIncomeTransactions.map(t => [
-            t.description,
-            t.category,
-            format(new Date(t.date), "dd MMM yyyy", { locale: localeId }),
-            formatCurrency(t.amount)
-        ])
-
-        // Add Table
-        autoTable(doc, {
-            startY: 45,
-            head: [['Uraian Pemasukan', 'Kategori', 'Tanggal', 'Jumlah']],
-            body: tableData,
-            theme: 'grid',
-            headStyles: { fillColor: [22, 163, 74] }, // Green header
-            styles: { fontSize: 9 },
-            columnStyles: {
-                0: { cellWidth: 80 },
-                3: { halign: 'right' }
-            }
-        })
-
-        doc.save(`laporan-pemasukan-lain-${format(new Date(), "yyyy-MM-dd")}.pdf`)
+    const handleExportPDF = async () => {
+        try {
+            const jsPDF = (await import("jspdf")).default
+            const autoTable = (await import("jspdf-autotable")).default
+            
+            const doc = new jsPDF()
+            
+            // Add Header
+            doc.setFontSize(18)
+            doc.text("Laporan Pemasukan Lain", 14, 20)
+            
+            doc.setFontSize(10)
+            doc.text(`Total Pemasukan: ${formatCurrency(totalOtherIncome)}`, 14, 30)
+            doc.text(`Tanggal Cetak: ${format(new Date(), "dd MMMM yyyy", { locale: localeId })}`, 14, 36)
+            
+            // Prepare table data
+            const tableData = otherIncomeTransactions.map(t => [
+                t.description,
+                t.category,
+                formatDate(t.date),
+                formatCurrency(t.amount)
+            ])
+    
+            // Add Table
+            autoTable(doc, {
+                startY: 45,
+                head: [['Uraian Pemasukan', 'Kategori', 'Tanggal', 'Jumlah']],
+                body: tableData,
+                theme: 'grid',
+                headStyles: { fillColor: [22, 163, 74] }, // Green header
+                styles: { fontSize: 9 },
+                columnStyles: {
+                    0: { cellWidth: 80 },
+                    3: { halign: 'right' }
+                }
+            })
+    
+            doc.save(`laporan-pemasukan-lain-${format(new Date(), "yyyy-MM-dd")}.pdf`)
+        } catch (error) {
+            console.error("Failed to generate PDF:", error)
+            toast.error("Gagal membuat PDF")
+        }
     }
 
     const handleHeaderAddClick = () => {
@@ -373,7 +416,7 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 min-h-[80vh] pb-20" suppressHydrationWarning>
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -394,20 +437,20 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
 
             {/* Tabs */}
             <Tabs defaultValue="summary" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-                <TabsList>
-                    <TabsTrigger value="summary" className="gap-2 data-[state=active]:text-blue-600">
+                <TabsList className="w-full justify-start overflow-x-auto">
+                    <TabsTrigger value="summary" className="gap-2 data-[state=active]:text-blue-600 min-w-fit">
                         <PieChart className="h-4 w-4" />
                         Ringkasan
                     </TabsTrigger>
-                    <TabsTrigger value="capital" className="gap-2 data-[state=active]:text-blue-600">
+                    <TabsTrigger value="capital" className="gap-2 data-[state=active]:text-blue-600 min-w-fit">
                         <Landmark className="h-4 w-4" />
                         Modal Awal
                     </TabsTrigger>
-                    <TabsTrigger value="other_income" className="gap-2 data-[state=active]:text-blue-600">
+                    <TabsTrigger value="other_income" className="gap-2 data-[state=active]:text-blue-600 min-w-fit">
                         <TrendingUp className="h-4 w-4" />
                         Pemasukan Lain
                     </TabsTrigger>
-                    <TabsTrigger value="expense" className="gap-2 data-[state=active]:text-blue-600">
+                    <TabsTrigger value="expense" className="gap-2 data-[state=active]:text-blue-600 min-w-fit">
                         <TrendingDown className="h-4 w-4" />
                         Pengeluaran
                     </TabsTrigger>
@@ -415,11 +458,11 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
 
                 <TabsContent value="summary" className="space-y-6">
                     {/* Summary Cards */}
-                    <div className="grid gap-4 md:grid-cols-4">
-                        <Card className="bg-white shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
+                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+                        <Card className="bg-white shadow-sm hover:shadow-md transition-shadow">
                             <CardContent className="p-6">
                                 <div className="flex items-center gap-4">
-                                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform duration-300">
+                                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
                                         <Wallet className="h-5 w-5" />
                                     </div>
                                     <div>
@@ -429,10 +472,10 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                 </div>
                             </CardContent>
                         </Card>
-                        <Card className="bg-white shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
+                        <Card className="bg-white shadow-sm hover:shadow-md transition-shadow">
                             <CardContent className="p-6">
                                 <div className="flex items-center gap-4">
-                                    <div className="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform duration-300">
+                                    <div className="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
                                         <ArrowUpRight className="h-5 w-5" />
                                     </div>
                                     <div>
@@ -442,10 +485,10 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                 </div>
                             </CardContent>
                         </Card>
-                        <Card className="bg-white shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
+                        <Card className="bg-white shadow-sm hover:shadow-md transition-shadow">
                             <CardContent className="p-6">
                                 <div className="flex items-center gap-4">
-                                    <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 group-hover:scale-110 transition-transform duration-300">
+                                    <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
                                         <ArrowDownRight className="h-5 w-5" />
                                     </div>
                                     <div>
@@ -455,10 +498,10 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                 </div>
                             </CardContent>
                         </Card>
-                        <Card className="bg-white shadow-sm group hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
+                        <Card className="bg-white shadow-sm hover:shadow-md transition-shadow">
                             <CardContent className="p-6">
                                 <div className="flex items-center gap-4">
-                                    <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform duration-300">
+                                    <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
                                         <Briefcase className="h-5 w-5" />
                                     </div>
                                     <div>
@@ -472,14 +515,15 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
 
                     <div className="grid gap-6 md:grid-cols-3">
                         {/* Recent Transactions */}
-                        <Card className="md:col-span-2 shadow-sm hover:shadow-lg hover:scale-[1.01] transition-all duration-300">
+                        <Card className="md:col-span-2 shadow-sm">
                             <CardHeader>
                                 <div className="flex justify-between items-center">
                                     <CardTitle className="text-lg">Aliran Kas Terakhir</CardTitle>
                                     <Button variant="ghost" size="sm" className="text-blue-600">Lihat Semua</Button>
                                 </div>
                             </CardHeader>
-                            <CardContent>
+                            <CardContent className="overflow-auto">
+                                <div className="min-w-[600px]">
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
@@ -504,7 +548,7 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                                     </Badge>
                                                 </TableCell>
                                                 <TableCell className="text-muted-foreground text-sm">
-                                                    {format(new Date(t.date), "d MMM yyyy", { locale: localeId })}
+                                                    {formatDate(t.date)}
                                                 </TableCell>
                                                 <TableCell className={cn(
                                                     "text-right font-bold",
@@ -523,6 +567,7 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                         )}
                                     </TableBody>
                                 </Table>
+                                </div>
                             </CardContent>
                         </Card>
 
@@ -601,10 +646,10 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
 
                     {/* Table Card */}
                     <Card className="border-none shadow-sm bg-white">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                        <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-2">
                             <CardTitle className="text-lg">Rincian Sumber Modal</CardTitle>
-                            <div className="flex gap-2">
-                                <div className="relative w-64 mr-2">
+                            <div className="flex flex-col sm:flex-row w-full md:w-auto gap-2">
+                                <div className="relative w-full sm:w-64">
                                     <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                                     <Input 
                                         placeholder="Cari..." 
@@ -613,15 +658,18 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
                                 </div>
-                                <Button variant="outline" size="icon" className="h-9 w-9">
-                                    <Filter className="h-4 w-4 text-muted-foreground" />
-                                </Button>
-                                <Button size="sm" onClick={() => openAddDialog("CAPITAL")} className="h-9 bg-blue-600 hover:bg-blue-700">
-                                    <Plus className="h-4 w-4 mr-2" /> Tambah
-                                </Button>
+                                <div className="flex gap-2">
+                                    <Button variant="outline" size="icon" className="h-9 w-9 shrink-0">
+                                        <Filter className="h-4 w-4 text-muted-foreground" />
+                                    </Button>
+                                    <Button size="sm" onClick={() => openAddDialog("CAPITAL")} className="h-9 bg-blue-600 hover:bg-blue-700 flex-1 sm:flex-none">
+                                        <Plus className="h-4 w-4 mr-2" /> Tambah
+                                    </Button>
+                                </div>
                             </div>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="overflow-auto">
+                            <div className="min-w-[600px]">
                             <Table>
                                 <TableHeader>
                                     <TableRow className="uppercase text-xs text-muted-foreground hover:bg-transparent border-b">
@@ -644,7 +692,7 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                             <TableRow key={t.id} className="hover:bg-gray-50">
                                                 <TableCell className="font-semibold text-base py-4">{t.description}</TableCell>
                                                 <TableCell className="text-muted-foreground">
-                                                    {format(new Date(t.date), "dd MMM yyyy", { locale: localeId })}
+                                                    {formatDate(t.date)}
                                                 </TableCell>
                                                 <TableCell>
                                                     <Badge variant="secondary" className="bg-blue-50 text-blue-700 hover:bg-blue-100 uppercase text-[10px] tracking-wide">
@@ -679,6 +727,7 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                     )}
                                 </TableBody>
                             </Table>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -766,7 +815,8 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                         </div>
 
                         <Card className="border-none shadow-sm bg-white">
-                            <CardContent className="p-0">
+                            <CardContent className="p-0 overflow-auto">
+                                <div className="min-w-[600px]">
                                 <Table>
                                     <TableHeader>
                                         <TableRow className="border-b border-gray-100 hover:bg-transparent">
@@ -796,7 +846,7 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                                         + {formatCurrency(t.amount)}
                                                     </TableCell>
                                                     <TableCell className="py-4 text-right pr-6">
-                                                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <div className="flex justify-end gap-2">
                                                             <Button 
                                                                 variant="ghost" 
                                                                 size="icon" 
@@ -820,6 +870,7 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
                                         )}
                                     </TableBody>
                                 </Table>
+                                </div>
                             </CardContent>
                         </Card>
                     </div>
@@ -903,63 +954,65 @@ export function FinancePageClient({ initialSummary, initialTransactions }: Finan
 
                         <Card className="border-none shadow-sm bg-white">
                             <CardContent className="p-0">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow className="border-b border-gray-100 hover:bg-transparent">
-                                            <TableHead className="py-4 px-6 text-xs font-bold uppercase text-gray-400 tracking-wider">Deskripsi</TableHead>
-                                            <TableHead className="py-4 text-xs font-bold uppercase text-gray-400 tracking-wider">Kategori</TableHead>
-                                            <TableHead className="py-4 text-xs font-bold uppercase text-gray-400 tracking-wider">Petugas/PIC</TableHead>
-                                            <TableHead className="py-4 text-xs font-bold uppercase text-gray-400 tracking-wider">Status</TableHead>
-                                            <TableHead className="py-4 text-right text-xs font-bold uppercase text-gray-400 tracking-wider">Jumlah</TableHead>
-                                            <TableHead className="py-4 text-right text-xs font-bold uppercase text-gray-400 tracking-wider pr-6">Aksi</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {filteredTransactions.length === 0 ? (
-                                            <TableRow>
-                                                <TableCell colSpan={6} className="text-center py-12 text-muted-foreground">
-                                                    Belum ada data pengeluaran tercatat
-                                                </TableCell>
+                                <div className="overflow-x-auto">
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow className="border-b border-gray-100 hover:bg-transparent">
+                                                <TableHead className="py-4 px-6 text-xs font-bold uppercase text-gray-400 tracking-wider">Deskripsi</TableHead>
+                                                <TableHead className="py-4 text-xs font-bold uppercase text-gray-400 tracking-wider">Kategori</TableHead>
+                                                <TableHead className="py-4 text-xs font-bold uppercase text-gray-400 tracking-wider">Petugas/PIC</TableHead>
+                                                <TableHead className="py-4 text-xs font-bold uppercase text-gray-400 tracking-wider">Status</TableHead>
+                                                <TableHead className="py-4 text-right text-xs font-bold uppercase text-gray-400 tracking-wider">Jumlah</TableHead>
+                                                <TableHead className="py-4 text-right text-xs font-bold uppercase text-gray-400 tracking-wider pr-6">Aksi</TableHead>
                                             </TableRow>
-                                        ) : (
-                                            filteredTransactions.map((t) => (
-                                                <TableRow key={t.id} className="hover:bg-gray-50 border-b border-gray-50 last:border-0 group transition-colors">
-                                                    <TableCell className="py-4 px-6 font-bold text-gray-800 text-base">{t.description}</TableCell>
-                                                    <TableCell className="py-4 font-bold text-xs text-gray-500 uppercase tracking-wider">{t.category}</TableCell>
-                                                    <TableCell className="py-4 font-medium text-gray-500 text-sm">Admin</TableCell>
-                                                    <TableCell className="py-4">
-                                                        <Badge variant="secondary" className="bg-emerald-50 text-emerald-600 hover:bg-emerald-100 uppercase text-[10px] tracking-wide font-bold">
-                                                            APPROVED
-                                                        </Badge>
-                                                    </TableCell>
-                                                    <TableCell className="py-4 text-right font-bold text-red-500 text-base">
-                                                        - {formatCurrency(t.amount)}
-                                                    </TableCell>
-                                                    <TableCell className="py-4 text-right pr-6">
-                                                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                            <Button 
-                                                                variant="ghost" 
-                                                                size="icon" 
-                                                                className="h-8 w-8 text-gray-400 hover:text-blue-600 hover:bg-blue-50"
-                                                                onClick={() => openEditDialog(t)}
-                                                            >
-                                                                <Pencil className="h-4 w-4" />
-                                                            </Button>
-                                                            <Button 
-                                                                variant="ghost" 
-                                                                size="icon" 
-                                                                className="h-8 w-8 text-gray-400 hover:text-red-600 hover:bg-red-50"
-                                                                onClick={() => openDeleteDialog(t.id)}
-                                                            >
-                                                                <Trash2 className="h-4 w-4" />
-                                                            </Button>
-                                                        </div>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {filteredTransactions.length === 0 ? (
+                                                <TableRow>
+                                                    <TableCell colSpan={6} className="text-center py-12 text-muted-foreground">
+                                                        Belum ada data pengeluaran tercatat
                                                     </TableCell>
                                                 </TableRow>
-                                            ))
-                                        )}
-                                    </TableBody>
-                                </Table>
+                                            ) : (
+                                                filteredTransactions.map((t) => (
+                                                    <TableRow key={t.id} className="hover:bg-gray-50 border-b border-gray-50 last:border-0 group transition-colors">
+                                                        <TableCell className="py-4 px-6 font-bold text-gray-800 text-base">{t.description}</TableCell>
+                                                        <TableCell className="py-4 font-bold text-xs text-gray-500 uppercase tracking-wider">{t.category}</TableCell>
+                                                        <TableCell className="py-4 font-medium text-gray-500 text-sm">Admin</TableCell>
+                                                        <TableCell className="py-4">
+                                                            <Badge variant="secondary" className="bg-emerald-50 text-emerald-600 hover:bg-emerald-100 uppercase text-[10px] tracking-wide font-bold">
+                                                                APPROVED
+                                                            </Badge>
+                                                        </TableCell>
+                                                        <TableCell className="py-4 text-right font-bold text-red-500 text-base">
+                                                            - {formatCurrency(t.amount)}
+                                                        </TableCell>
+                                                        <TableCell className="py-4 text-right pr-6">
+                                                            <div className="flex justify-end gap-2">
+                                                                <Button 
+                                                                    variant="ghost" 
+                                                                    size="icon" 
+                                                                    className="h-8 w-8 text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                                                                    onClick={() => openEditDialog(t)}
+                                                                >
+                                                                    <Pencil className="h-4 w-4" />
+                                                                </Button>
+                                                                <Button 
+                                                                    variant="ghost" 
+                                                                    size="icon" 
+                                                                    className="h-8 w-8 text-gray-400 hover:text-red-600 hover:bg-red-50"
+                                                                    onClick={() => openDeleteDialog(t.id)}
+                                                                >
+                                                                    <Trash2 className="h-4 w-4" />
+                                                                </Button>
+                                                            </div>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                </div>
                             </CardContent>
                         </Card>
                     </div>

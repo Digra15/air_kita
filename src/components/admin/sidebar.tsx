@@ -95,7 +95,7 @@ export function Sidebar({
   console.log('Sidebar userRole:', userRole)
 
   return (
-    <div className="space-y-4 py-4 flex flex-col h-full bg-white text-slate-800 border-r print:hidden">
+    <div className="space-y-4 py-4 flex flex-col h-full bg-white text-slate-800 border-r print:hidden" suppressHydrationWarning>
       <div className="px-3 py-2 flex-1 overflow-y-auto custom-scrollbar">
         <Link href="/admin/dashboard" className="flex items-center pl-3 mb-10">
           <div className="relative w-10 h-10 mr-3 flex items-center justify-center bg-blue-600 rounded-xl shadow-lg shadow-blue-200 group-hover:scale-110 transition-transform">

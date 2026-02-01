@@ -149,7 +149,10 @@ export function AccountingView({ data, companyName, companyAddress }: Accounting
   const costEfficiency = totalRevenue > 0 ? (totalExpense / totalRevenue) * 100 : 0
 
   // PDF Export Helper
-  const exportPDF = (type: 'ledger' | 'pl' | 'balance' | 'cashflow') => {
+  const exportPDF = async (type: 'ledger' | 'pl' | 'balance' | 'cashflow') => {
+    const jsPDF = (await import("jspdf")).default
+    const autoTable = (await import("jspdf-autotable")).default
+    
     const doc = new jsPDF()
     const now = new Date()
     const dateStr = now.toLocaleDateString("id-ID", { day: '2-digit', month: 'long', year: 'numeric' })
@@ -254,7 +257,7 @@ export function AccountingView({ data, companyName, companyAddress }: Accounting
     <div className="space-y-8">
       
       {/* Hero Section - Neraca Rugi Laba (Estimasi) */}
-      <div className="relative overflow-hidden rounded-2xl bg-[#0f172a] p-8 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all duration-300">
+      <div className="relative overflow-hidden rounded-2xl bg-[#0f172a] p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-300">
         <div className="absolute top-0 right-0 -mt-4 -mr-4 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 -mb-4 -ml-4 h-64 w-64 rounded-full bg-purple-500/10 blur-3xl"></div>
         

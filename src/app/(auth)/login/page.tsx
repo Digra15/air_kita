@@ -41,7 +41,7 @@ export default async function LoginPage() {
         </div>
 
         <div className="relative z-10 text-sm text-blue-200">
-          &copy; {new Date().getFullYear()} Arunika. All rights reserved.
+          &copy; {new Date().getFullYear()} {companyName}. All rights reserved.
         </div>
       </div>
 

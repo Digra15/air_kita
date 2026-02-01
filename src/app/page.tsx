@@ -10,6 +10,9 @@ export default async function Home() {
   const settings = await getSystemSettings()
   const companyName = settings?.companyName || "Air Kita"
   const companyLogo = settings?.companyLogo
+  const companyAddress = settings?.companyAddress || "Jalan Raya No. 123, Kota Air, Indonesia"
+  const companyPhone = settings?.companyPhone || "(021) 1234-5678"
+  const companyEmail = settings?.companyEmail || `cs@${companyName.toLowerCase().replace(/\s/g, '')}.com`
   const heroTitle = settings?.heroTitle || "Kelola Tagihan Air Anda dengan Mudah & Cepat"
   const heroDescription = settings?.heroDescription || `Pantau penggunaan air, cek tagihan bulanan, dan lakukan pembayaran dengan mudah melalui platform digital ${companyName}.`
 
@@ -218,21 +221,21 @@ export default async function Home() {
               <ul className="space-y-4 text-slate-400">
                 <li className="flex items-start gap-3">
                   <span className="mt-1">📍</span>
-                  <span>Jalan Raya No. 123, Kota Air, Indonesia</span>
+                  <span>{companyAddress}</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span>📞</span>
-                  <span>(021) 1234-5678</span>
+                  <span>{companyPhone}</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span>✉️</span>
-                  <span>cs@{companyName.toLowerCase().replace(/\s/g, '')}.com</span>
+                  <span>{companyEmail}</span>
                 </li>
               </ul>
             </div>
           </div>
           <div className="text-center text-slate-500 text-sm">
-            &copy; {new Date().getFullYear()} Arunika. Hak Cipta Dilindungi.
+            &copy; {new Date().getFullYear()} {companyName}. Hak Cipta Dilindungi.
           </div>
         </div>
       </footer>

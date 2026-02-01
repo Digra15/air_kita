@@ -8,14 +8,8 @@ import { BackupStatus } from "@prisma/client"
 import fs from "fs/promises"
 import path from "path"
 
-export async function createBackup() {
+export async function generateBackup() {
   try {
-    const session = await auth()
-    
-    if (!session?.user || (session.user.role !== Role.SUPER_ADMIN && session.user.role !== Role.ADMIN)) {
-      return { success: false, error: "Unauthorized" }
-    }
-
     const [
       systemSettings,
       users,
@@ -71,10 +65,9 @@ export async function createBackup() {
       }
     })
 
-    revalidatePath("/admin/settings")
     return { success: true, data: jsonString, fileName }
   } catch (error) {
-    console.error("Backup error:", error)
+    console.error("Backup generation error:", error)
     // Try to record failure if DB is accessible
     try {
         await db.backupHistory.create({
@@ -86,6 +79,27 @@ export async function createBackup() {
         })
     } catch(e) { /* ignore */ }
     
+    return { success: false, error: "Failed to create backup" }
+  }
+}
+
+export async function createBackup() {
+  try {
+    const session = await auth()
+    
+    if (!session?.user || (session.user.role !== Role.SUPER_ADMIN && session.user.role !== Role.ADMIN)) {
+      return { success: false, error: "Unauthorized" }
+    }
+
+    const result = await generateBackup()
+    
+    if (result.success) {
+      revalidatePath("/admin/settings")
+    }
+    
+    return result
+  } catch (error) {
+    console.error("Backup error:", error)
     return { success: false, error: "Failed to create backup" }
   }
 }

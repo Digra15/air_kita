@@ -1,4 +1,5 @@
 import { getDashboardStats } from "@/lib/actions/analytics"
+import { getSystemSettings } from "@/lib/data/settings"
 import { Overview } from "@/components/admin/dashboard/overview"
 import { UsageOverview } from "@/components/admin/dashboard/usage-overview"
 import { RecentSales } from "@/components/admin/dashboard/recent-sales"
@@ -8,7 +9,13 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default async function DashboardPage() {
-    const rawStats = await getDashboardStats()
+    const [rawStats, settings] = await Promise.all([
+        getDashboardStats(),
+        getSystemSettings()
+    ])
+    
+    const companyName = settings?.companyName || "Air Kita"
+
     const stats = {
         ...rawStats,
         recentSales: rawStats.recentSales.map(sale => ({
@@ -36,7 +43,7 @@ export default async function DashboardPage() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-3xl font-bold tracking-tight text-slate-900">Dashboard Eksekutif</h2>
-                    <p className="text-slate-500 mt-1">Pantau metrik performa realtime Air Kita.</p>
+                    <p className="text-slate-500 mt-1">Pantau metrik performa realtime {companyName}.</p>
                 </div>
                 <Button className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-lg shadow-indigo-200 rounded-full px-6">
                     <Sparkles className="mr-2 h-4 w-4" />

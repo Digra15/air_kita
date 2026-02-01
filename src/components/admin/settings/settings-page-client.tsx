@@ -43,9 +43,9 @@ export function SettingsPageClient({
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-end -mt-16 mb-8">
+      <div className="flex justify-end md:-mt-16 mb-8">
         <Button 
-          className="bg-blue-600 hover:bg-blue-700" 
+          className="bg-blue-600 hover:bg-blue-700 w-full md:w-auto" 
           onClick={handleSave} 
           disabled={isPending}
         >
@@ -55,20 +55,20 @@ export function SettingsPageClient({
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="profile" className="gap-2">
+        <TabsList className="w-full justify-start overflow-x-auto">
+          <TabsTrigger value="profile" className="gap-2 min-w-fit">
             <Building2 className="h-4 w-4" />
             Profil Perusahaan
           </TabsTrigger>
-          <TabsTrigger value="access" className="gap-2">
+          <TabsTrigger value="access" className="gap-2 min-w-fit">
             <Shield className="h-4 w-4" />
             Manajemen Akses
           </TabsTrigger>
-          <TabsTrigger value="database" className="gap-2">
+          <TabsTrigger value="database" className="gap-2 min-w-fit">
             <Database className="h-4 w-4" />
             Database & Backup
           </TabsTrigger>
-          <TabsTrigger value="security" className="gap-2">
+          <TabsTrigger value="security" className="gap-2 min-w-fit">
             <Key className="h-4 w-4" />
             Keamanan & API
           </TabsTrigger>

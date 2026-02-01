@@ -23,36 +23,36 @@ export function ReportsPageClient({ transactions, usageData, companyName, compan
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-end gap-2 -mt-16 mb-8">
-        <Button variant="outline" className="gap-2">
+      <div className="flex flex-col md:flex-row justify-end gap-2 md:-mt-16 mb-8">
+        <Button variant="outline" className="gap-2 w-full md:w-auto">
           <Printer className="h-4 w-4" />
           Cetak Laporan
         </Button>
-        <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
+        <Button className="gap-2 bg-blue-600 hover:bg-blue-700 w-full md:w-auto">
           <Download className="h-4 w-4" />
           Export Data (Excel)
         </Button>
       </div>
 
       <Tabs defaultValue={defaultTab} className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="usage" className="gap-2 data-[state=active]:text-blue-600">
+        <TabsList className="w-full justify-start overflow-x-auto">
+          <TabsTrigger value="usage" className="gap-2 data-[state=active]:text-blue-600 min-w-fit">
             <Droplets className="h-4 w-4" />
             Laporan Pemakaian
           </TabsTrigger>
-          <TabsTrigger value="income" className="gap-2 data-[state=active]:text-blue-600">
+          <TabsTrigger value="income" className="gap-2 data-[state=active]:text-blue-600 min-w-fit">
             <TrendingUp className="h-4 w-4" />
             Laporan Pemasukan
           </TabsTrigger>
-          <TabsTrigger value="expense" className="gap-2 data-[state=active]:text-blue-600">
+          <TabsTrigger value="expense" className="gap-2 data-[state=active]:text-blue-600 min-w-fit">
             <TrendingDown className="h-4 w-4" />
             Laporan Pengeluaran
           </TabsTrigger>
-          <TabsTrigger value="stats" className="gap-2 data-[state=active]:text-blue-600">
+          <TabsTrigger value="stats" className="gap-2 data-[state=active]:text-blue-600 min-w-fit">
             <BarChart3 className="h-4 w-4" />
             Statistik
           </TabsTrigger>
-          <TabsTrigger value="accounting" className="gap-2 data-[state=active]:text-blue-600">
+          <TabsTrigger value="accounting" className="gap-2 data-[state=active]:text-blue-600 min-w-fit">
             <BookOpen className="h-4 w-4" />
             Akuntansi
           </TabsTrigger>

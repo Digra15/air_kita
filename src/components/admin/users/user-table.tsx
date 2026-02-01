@@ -149,14 +149,14 @@ export function UserTable({ data }: UserTableProps) {
         </DialogContent>
       </Dialog>
 
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Nama</TableHead>
-              <TableHead>Email</TableHead>
+              <TableHead className="hidden md:table-cell">Email</TableHead>
               <TableHead>Role</TableHead>
-              <TableHead>Terdaftar</TableHead>
+              <TableHead className="hidden md:table-cell">Terdaftar</TableHead>
               <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
           </TableHeader>
@@ -177,14 +177,17 @@ export function UserTable({ data }: UserTableProps) {
                               Meter: {user.customer.meterNumber}
                           </div>
                       )}
+                      <div className="md:hidden text-xs text-muted-foreground mt-1">
+                          {user.email}
+                      </div>
                   </TableCell>
-                  <TableCell>{user.email}</TableCell>
+                  <TableCell className="hidden md:table-cell">{user.email}</TableCell>
                   <TableCell>
                     <Badge variant={getRoleBadgeColor(user.role)}>
                       {roleLabels[user.role]}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
                       {new Date(user.createdAt).toLocaleDateString('id-ID')}
                   </TableCell>
                   <TableCell className="text-right">

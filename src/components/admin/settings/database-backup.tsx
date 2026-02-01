@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Badge } from "@/components/ui/badge"
-import { Database, Download, Upload, Clock, RefreshCw, Loader2, CheckCircle, XCircle, FileJson, Calendar, HardDrive } from "lucide-react"
+import { Database, Download, Upload, Clock, RefreshCw, Loader2, CheckCircle } from "lucide-react"
 import { createBackup, restoreBackup, downloadBackup } from "@/lib/actions/backup"
 import { testDatabaseConnection } from "@/lib/actions/database"
 import { useState, useRef } from "react"
@@ -50,7 +50,7 @@ export function DatabaseBackup({
         setConnectionStatus({ error: result.error })
         toast.error(result.error)
       }
-    } catch (error) {
+    } catch {
         setConnectionStatus({ error: "Gagal melakukan tes koneksi" })
     } finally {
       setIsTesting(false)
@@ -76,7 +76,7 @@ export function DatabaseBackup({
         } else {
             toast.error(result.error || "Gagal mengunduh backup")
         }
-    } catch (error) {
+    } catch {
         toast.error("Terjadi kesalahan saat mengunduh")
     } finally {
         setIsDownloading(null)

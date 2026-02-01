@@ -2,8 +2,6 @@
 
 import { Button } from "@/components/ui/button"
 import { Download } from "lucide-react"
-import jsPDF from "jspdf"
-import autoTable from "jspdf-autotable"
 
 interface ExportButtonProps {
   data: {
@@ -22,7 +20,11 @@ interface ExportButtonProps {
 }
 
 export function ExportButton({ data, monthName, year, companyName, companyAddress }: ExportButtonProps) {
-  const handleExport = () => {
+  const handleExport = async () => {
+    // Dynamic import
+    const jsPDF = (await import("jspdf")).default
+    const autoTable = (await import("jspdf-autotable")).default
+
     // 1. Init PDF
     const doc = new jsPDF()
 

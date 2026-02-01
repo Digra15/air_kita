@@ -2,8 +2,6 @@
 
 import { Button } from "@/components/ui/button"
 import { Download } from "lucide-react"
-import jsPDF from "jspdf"
-import autoTable from "jspdf-autotable"
 import { PaymentMethod } from "@prisma/client"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
@@ -34,7 +32,11 @@ interface BillingExportButtonProps {
 }
 
 export function BillingExportButton({ data, companyName, companyAddress, selectedMonth, selectedYear }: BillingExportButtonProps) {
-  const handleExport = () => {
+  const handleExport = async () => {
+    // Dynamic import
+    const jsPDF = (await import("jspdf")).default
+    const autoTable = (await import("jspdf-autotable")).default
+
     // 1. Init PDF
     const doc = new jsPDF()
 

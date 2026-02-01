@@ -1,5 +1,6 @@
 import { getFinancialSummary, getTransactions } from "@/lib/actions/finance"
 import { FinancePageClient } from "@/components/admin/finance/finance-page-client"
+import { SimpleErrorBoundary } from "@/components/simple-error-boundary"
 
 export default async function FinancePage() {
     const summary = await getFinancialSummary()
@@ -15,10 +16,12 @@ export default async function FinancePage() {
 
     return (
         <div className="space-y-6">
-            <FinancePageClient 
-                initialSummary={summary} 
-                initialTransactions={formattedTransactions} 
-            />
+            <SimpleErrorBoundary>
+                <FinancePageClient 
+                    initialSummary={summary} 
+                    initialTransactions={formattedTransactions} 
+                />
+            </SimpleErrorBoundary>
         </div>
     )
 }

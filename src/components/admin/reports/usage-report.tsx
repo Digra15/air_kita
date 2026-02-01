@@ -7,8 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, Droplets, Users, TrendingUp, Filter, RefreshCcw, Calendar } from "lucide-react"
-import { formatCurrency } from "@/lib/utils"
+import { Search, Droplets, Users, TrendingUp, RefreshCcw, Calendar } from "lucide-react"
 
 interface UsageRecord {
   id: string

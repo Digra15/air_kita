@@ -3,7 +3,7 @@
 import { Menu, Search, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import { Sidebar } from "./sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
@@ -25,7 +25,7 @@ export function Navbar({
                     <Menu />
                 </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="p-0 bg-white">
+            <SheetContent side="left" className="p-0 bg-white w-[85vw] sm:w-[350px]">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 <Sidebar companyName={companyName} companyLogo={companyLogo} userRole={userRole} />
             </SheetContent>
